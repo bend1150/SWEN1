@@ -19,6 +19,7 @@ Stack ||--|| User
 Card}|--|| Package
 
 class Package{
+-Card[] packageCard = new Card[5]
 }
 
 class Card {
@@ -32,6 +33,6 @@ class User {
 -int coins
 }
 class Stack{
-Vector<E> = new Vector<E>()
-}
+List<Card> Stack
+ }
 @enduml
