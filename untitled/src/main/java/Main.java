@@ -1,9 +1,12 @@
 
 import java.util.Random;
 public class Main {
+
     private enum name{
         GOBLIN, DRAGON, ORC, WIZARD, KNIGHT, ELF, KRAKEN
     }
+
+
     public static void main(String[] args) {
 
 
@@ -14,7 +17,8 @@ public class Main {
             int num = rn.nextInt(7);
 
             System.out.println(
-                    name.values()[6].toString()
+                    name.values()[num].toString()
+
             );
         }
 
