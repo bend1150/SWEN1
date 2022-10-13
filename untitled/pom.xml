@@ -37,7 +37,7 @@
     <properties>
         <maven.compiler.source>14</maven.compiler.source> <!-- 17 -->
         <maven.compiler.target>14</maven.compiler.target>   <!-- 17 -->
-        <!--<project.build.sourceEndcoding>UTF-8</project.build.sourceEndcoding>-->
+        <project.build.sourceEndcoding>UTF-8</project.build.sourceEndcoding>
     </properties>
 
     

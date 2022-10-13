@@ -2,6 +2,17 @@
 import java.sql.*;
 
 public class PostgreSample {
+
+    if (DriverManager.getConnection(
+            "jdbc:postgresql://localhost:5432/mydb",
+            "postgres", "")) {
+        System.out.println("Successful Connection");
+    }
+    else
+    {
+        System.out.println("Connection failed");
+    }
+
     /*
 
 
@@ -31,7 +42,6 @@ public class PostgreSample {
             ex.printStackTrace();
         }
     }
-
 
 */
 }
