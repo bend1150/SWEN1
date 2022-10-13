@@ -3,6 +3,12 @@ import java.sql.*;
 
 public class PostgreSample {
 
+    private final String url ="";
+
+    private final String user ="";
+
+    private final String password = "PROGRES_PASSWORD";
+
     if (DriverManager.getConnection(
             "jdbc:postgresql://localhost:5432/mydb",
             "postgres", "")) {
