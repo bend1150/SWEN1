@@ -3,12 +3,20 @@ import java.sql.*;
 
 public class PostgreSample {
 
-    private final String url ="";
+    private final String url = "jdbc:postgresql://localhost:5432/CardGame"
+    static void DataHandler() throws SQLException {
 
-    private final String user ="";
+        connection = DriverManager.getConnection();
+    }
 
-    private final String password = "PROGRES_PASSWORD";
+    //private final String url ="";
 
+    //private final String user ="";
+
+    //private final String password = "PROGRES_PASSWORD";
+
+    //System.out.println(url+user+password);
+    /*
     if (DriverManager.getConnection(
             "jdbc:postgresql://localhost:5432/mydb",
             "postgres", "")) {
@@ -18,7 +26,7 @@ public class PostgreSample {
     {
         System.out.println("Connection failed");
     }
-
+    */
     /*
 
 
