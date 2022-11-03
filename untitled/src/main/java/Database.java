@@ -1,18 +1,26 @@
 
 import java.sql.*;
 
-public class PostgreSample {
+public class Database {
 
-    private static Connection connection = null;
-    private static final String url = "jdbc:postgresql://localhost:5432/swen1db";
+    private static Connection _connection = null;
+    private static final String url = "jdbc:postgresql://localhost:5432/cardgame";
     private static final String user ="postgres";
     private static final String password="pwd123456";
-    static void DataHandler() throws SQLException {
-
-        connection = DriverManager.getConnection(url, user, password);
+    static void openConnection() throws SQLException {
+        _connection = DriverManager.getConnection(url, user, password);
+        System.out.println("Connection established...");
     }
 
-    public PostgreSample() {
+    static void closeConnection() throws SQLException {
+        _connection.close();
+        _connection = null;
+        System.out.println("Connection terminated...");
+    }
+
+
+
+    public Database() {
     }
     //private final String url ="";
 

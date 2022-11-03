@@ -5,8 +5,9 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-        PostgreSample test = new PostgreSample();
-        test.DataHandler();
+        //Database test = new Database();
+        //test.openConnection();
+        Database.openConnection();
 
 
 
