@@ -1,4 +1,14 @@
 abstract class Card {
+
+    public int getCardID() {
+        return cardID;
+    }
+
+    public void setCardID(int cardID) {
+        this.cardID = cardID;
+    }
+
+    protected int cardID;
     protected String name;
     protected int damage;
     protected String elementType;

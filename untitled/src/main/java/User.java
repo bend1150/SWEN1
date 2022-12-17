@@ -6,9 +6,20 @@ public class User {
     private String username;
     private String password;
 
+    private int id;
+    private List<Card> deck = new ArrayList<Card>();
+
     private int coins = 20;
-    private List<Card> myCard = new ArrayList<>();
+
     private int eloValue = 100;
+
+    public User(String username, String password, int id, int coins, int eloValue) {
+        this.username = username;
+        this.password = password;
+        this.id = id;
+        this.coins = coins;
+        this.eloValue = eloValue;
+    }
 
     public String getUsername() {
         return username;
@@ -34,13 +45,6 @@ public class User {
         this.coins = coins;
     }
 
-    public List<Card> getMyCard() {
-        return myCard;
-    }
-
-    public void setMyCard(List<Card> myCard) {
-        this.myCard = myCard;
-    }
 
     public int getEloValue() {
         return eloValue;
@@ -49,4 +53,14 @@ public class User {
     public void setEloValue(int eloValue) {
         this.eloValue = eloValue;
     }
+
+    public List<Card> getDeck() {
+        return deck;
+    }
+
+    public void setDeck(List<Card> deck) {
+        this.deck = deck;
+    }
+
+
 }
