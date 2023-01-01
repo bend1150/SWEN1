@@ -43,7 +43,7 @@ public class Main {
 
         int victor = BattleLogic.startFight(player1,player2);
 
-        System.out.println("Player " + victor + "wins");
+        System.out.println("Player" + victor + " wins");
 
     }
 

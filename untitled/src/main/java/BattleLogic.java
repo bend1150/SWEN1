@@ -23,8 +23,6 @@ public class BattleLogic {
                 }
 
             }
-
-
             if(user1.getDeck().size()==0){
                 victoryPlayer = 2;
             } else {
