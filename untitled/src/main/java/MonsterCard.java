@@ -4,7 +4,7 @@ import java.util.Random;
 public class MonsterCard extends Card {
 
     private enum names{
-        GOBLIN, DRAGON, ORC, WIZARD, KNIGHT, ELF, KRAKEN
+        GOBLIN, DRAGON, ORC, WIZZARD, KNIGHT, ELF, KRAKEN
     }
     private enum type{
         WATER, FIRE, NORMAL
