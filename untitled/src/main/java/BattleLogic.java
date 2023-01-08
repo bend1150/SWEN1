@@ -1,5 +1,7 @@
-import java.util.Random;
 
+import java.util.Random;
+import Card.*;
+import User.*;
 
 public class BattleLogic {
 
@@ -11,23 +13,23 @@ public class BattleLogic {
             // 1: Player1 wins; 2: Player2 wins ; 3: Draw
             int victoryCard = 0;
 
-            while(user1.getDeck().size()>0 && user2.getDeck().size()>0) {         //solange beide user was im deck haben, wird gespielt
+            while(user1.getDeck().size()>0 && user2.getDeck().size()>0) {         //continue if both player still has card in deck
                 System.out.println("---------------Round "+numberRound+"---------------");
                 int num1 = ((int) (Math.random() * user1.getDeck().size()));
                 int num2 = ((int) (Math.random() * user2.getDeck().size()));
                 Card card1 = user1.getDeck().get(num1);
                 Card card2 = user2.getDeck().get(num2);
 
-                if (card1 instanceof MonsterCard && card2 instanceof  MonsterCard){ // Pure monster battle
+                if (card1 instanceof MonsterCard && card2 instanceof MonsterCard){ // Pure monster battle
                     System.out.println("Player1: "+card1.getElementType()+card1.getName()+"("+card1.getDamage()+")"+" VS Player2: "+card2.getElementType()+card2.getName()+"("+card2.getDamage()+")");
                     victoryCard = MonsterBattle(card1, card2);
                 }
 
-                if (card1 instanceof SpellCard && card2 instanceof  SpellCard){ // Pure spell battle
+                if (card1 instanceof SpellCard && card2 instanceof SpellCard){ // Pure spell battle
                     System.out.println("Player1: "+card1.getElementType()+"Spell ("+card1.getDamage()+")"+" VS Player2: "+card2.getElementType()+"Spell ("+card2.getDamage()+")");
                     victoryCard = SpellBattle(card1, card2);
                 }
-                if((card1 instanceof  MonsterCard && card2 instanceof  SpellCard)||(card1 instanceof  SpellCard && card2 instanceof MonsterCard)){
+                if((card1 instanceof MonsterCard && card2 instanceof SpellCard)||(card1 instanceof SpellCard && card2 instanceof MonsterCard)){
                     if(card1 instanceof MonsterCard){
                         System.out.println("Player1: "+card1.getElementType()+card1.getName()+ " ("+card1.getDamage()+") VS Player2: "+card2.getElementType()+"Spell ("+card2.getDamage()+")");
                     } else {
@@ -68,7 +70,7 @@ public class BattleLogic {
             return victoryPlayer;
         }
 
-        static public int MonsterBattle(Card card1,Card card2){             //returniert gewonnene Karte
+        static public int MonsterBattle(Card card1, Card card2){             //returniert gewonnene Karte
             System.out.println("this is a PURE MonsterBattle!");
             if((card1.getName()=="GOBLIN"||card2.getName()=="GOBLIN")&&(card1.getName()=="DRAGON"||card2.getName()=="DRAGON")){
                 System.out.println("GOBLIN IS AFRAID OF DRAGON!!!");

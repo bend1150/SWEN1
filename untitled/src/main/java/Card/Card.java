@@ -1,4 +1,6 @@
-abstract class Card {
+package Card;
+
+public abstract class Card {
 
     public int getCardID() {
         return cardID;

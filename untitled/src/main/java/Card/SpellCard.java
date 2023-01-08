@@ -1,3 +1,5 @@
+package Card;
+
 import java.util.Random;
 
 public class SpellCard extends Card{

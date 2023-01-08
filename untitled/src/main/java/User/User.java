@@ -1,13 +1,27 @@
+package User;
+
 import java.util.ArrayList;
 import java.util.List;
+import Card.*;
 
 
 public class User {
     private String username;
     private String password;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private int id;
     private List<Card> deck = new ArrayList<Card>();
+
+
+    private List<Card> stack = new ArrayList<Card>();
 
     private int coins = 20;
 
@@ -61,6 +75,15 @@ public class User {
     public void setDeck(List<Card> deck) {
         this.deck = deck;
     }
+
+    public List<Card> getStack() {
+        return stack;
+    }
+
+    public void setStack(List<Card> stack) {
+        this.stack = stack;
+    }
+
 
 
 }
