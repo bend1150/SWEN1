@@ -31,7 +31,7 @@ public class MonsterCard extends Card {
 
     }
 
-    public Card generateRandomizedMonsterCard() {
+    public MonsterCard generateRandomizedMonsterCard() {
         Random rn = new Random();
 
         int num = rn.nextInt(7);                // Generate a number between 0-6

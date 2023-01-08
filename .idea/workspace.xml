@@ -13,8 +13,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JUnit5 Test Class" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -59,10 +59,11 @@
       <recent name="" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="DB" />
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.BattleLogicTest">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="untitled" />
@@ -79,21 +80,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BattleLogicTest.battle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="untitled" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="BattleLogicTest" />
-      <option name="METHOD_NAME" value="battle" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="BattleLogicTest.mixedBattle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="untitled" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="BattleLogicTest" />
       <option name="METHOD_NAME" value="mixedBattle" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BattleLogicTest.monsterBattle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="untitled" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BattleLogicTest" />
+      <option name="METHOD_NAME" value="monsterBattle" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -111,11 +112,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.BattleLogicTest.spellBattle" />
+        <item itemvalue="JUnit.BattleLogicTest.monsterBattle" />
         <item itemvalue="JUnit.BattleLogicTest" />
         <item itemvalue="JUnit.BattleLogicTest.mixedBattle" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="JUnit.BattleLogicTest.battle" />
-        <item itemvalue="JUnit.BattleLogicTest.spellBattle" />
       </list>
     </recent_temporary>
   </component>
@@ -138,7 +139,7 @@
       <workItem from="1672927112679" duration="3293000" />
       <workItem from="1673004477450" duration="6806000" />
       <workItem from="1673094386273" duration="8341000" />
-      <workItem from="1673182503064" duration="620000" />
+      <workItem from="1673182503064" duration="13678000" />
     </task>
     <servers />
   </component>

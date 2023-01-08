@@ -1,9 +1,11 @@
 package DB;
 
+import java.util.Random;
 import java.sql.*;
 import Card.*;
 import DB.*;
 import User.*;
+
 
 public class UserQuery {
 
@@ -100,54 +102,38 @@ public class UserQuery {
 
             // Generate 4 random cards for the package
 
+            Random rand = new Random();
 
-            Card card1 = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
-            Card card2 = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
-            Card card3 = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
-            Card card4 = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
+            for(int i=0; i < 4; i++) {
+                int cardType = rand.nextInt(2);     //random number between 1 and 2
+                Card card;
+                if(cardType == 0){
+                    card = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
+                } else {
+                    card = new SpellCard("1",1,1).generateRandomizedSpellcard();
+                }
+                // Add to stack
+                player.getStack().add(card);
 
+                // Add the cards to the cards table in the database
+                try (Connection connection = DriverManager.getConnection(url, user, pass);
+                     PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO cards (name, damage, element, cardType, userid) VALUES (?, ?, ?, ?, ?)")) {
+                    insertStmt.setString(1, card.getName());
+                    insertStmt.setInt(2, card.getDamage());
+                    insertStmt.setString(3, card.getElementType());
+                    insertStmt.setString(4, cardType==0 ? "MONSTER" : "SPELL");
+                    insertStmt.setInt(5, player.getId());
+                    insertStmt.executeUpdate();
+                }
 
-
-            // Add the cards to the user's stack
-
-            player.getStack().add(card1);
-            player.getStack().add(card2);
-            player.getStack().add(card3);
-            player.getStack().add(card4);
-
-
-
-            // Add the cards to the cards table in the database
-            try (Connection connection = DriverManager.getConnection(url, user, pass);
-                 PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO cards (name, damage, element, cardType, userid) VALUES (?, ?, ?, ?, ?)")) {
-                insertStmt.setString(1, card1.getName());
-                insertStmt.setInt(2, card1.getDamage());
-                insertStmt.setString(3, card1.getElementType());
-                insertStmt.setString(4, "MONSTER");
-                insertStmt.setInt(5, player.getId());
-                insertStmt.executeUpdate();
-
-                insertStmt.setString(1, card2.getName());
-                insertStmt.setInt(2, card2.getDamage());
-                insertStmt.setString(3, card2.getElementType());
-                insertStmt.setString(4, "MONSTER");
-                insertStmt.setInt(5, player.getId());
-                insertStmt.executeUpdate();
-
-                insertStmt.setString(1, card3.getName());
-                insertStmt.setInt(2, card3.getDamage());
-                insertStmt.setString(3, card3.getElementType());
-                insertStmt.setString(4, "MONSTER");
-                insertStmt.setInt(5, player.getId());
-                insertStmt.executeUpdate();
-
-                insertStmt.setString(1, card4.getName());
-                insertStmt.setInt(2, card4.getDamage());
-                insertStmt.setString(3, card4.getElementType());
-                insertStmt.setString(4, "MONSTER");
-                insertStmt.setInt(5, player.getId());
-                insertStmt.executeUpdate();
             }
+            // Decrease coin -5 in DB
+            try (Connection connection = DriverManager.getConnection(url, user, pass);
+                 PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET coins = coins - 5 WHERE id = ?")) {
+                updateStmt.setInt(1, player.getId());
+                updateStmt.executeUpdate();
+            }
+
         }
     }
 

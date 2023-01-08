@@ -17,4 +17,16 @@ public class SpellCard extends Card{
 
 
     }
+
+    public SpellCard generateRandomizedSpellcard() {
+        Random rn = new Random();
+
+        int num = rn.nextInt(3);
+        this.elementType = type.values()[num].toString();
+
+        num = rn.nextInt(50);                   // Generate a number between 0-49
+        this.damage = num;
+
+        return this;
+    }
 }

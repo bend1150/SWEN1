@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 import DB.*;
@@ -21,9 +22,13 @@ public class Main {
         System.out.println(("Enter password: "));
         String password = scanner.nextLine();
 
+        //User user1 = UserQuery.loginUser(username,password);
         User user1 = UserQuery.loginUser(username,password);
 
-        UserQuery.buyPackage(user1);
+
+
+        CardQuery.showStack(user1);
+        CardQuery.createDeck(user1);
         /*
         System.out.println("Enter your username2:");
         String username2 = scanner.nextLine();
@@ -57,8 +62,8 @@ public class Main {
         */
 
 
-        Card card58 = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
-        Card card59 = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
+        MonsterCard card58 = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
+        MonsterCard card59 = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
 
 
         List<Card> deck1 = new ArrayList<Card>();
@@ -86,14 +91,14 @@ public class Main {
         player2.setDeck(deck2);
 
 
-
+/*
         int victory = BattleLogic.battle(player1,player2);
         if(victory == 1 || victory == 2) {
             System.out.println(" >>>>>>>>>>>>>>>>>>>Player" + victory + " wins!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         } else if(victory == 3){
             System.out.println("DRAW!!!");
         }
-
+*/
 
     }
 
