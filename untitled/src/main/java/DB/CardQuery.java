@@ -51,6 +51,11 @@ public class CardQuery {
             }
         }
 
+        if (allowedCardIds.size() != cardIds.length) {
+            System.out.println("Card not found in your stack");
+            return;
+        }
+
         // Use an upsert statement to insert a row into the 'deck' table for the player
         PreparedStatement upsertStmt = conn.prepareStatement("INSERT INTO deck (userid, card1, card2, card3, card4) VALUES (?, ?, ?, ?, ?) ON CONFLICT (userid) DO UPDATE SET card1 = ?, card2 = ?, card3 = ?, card4 = ?");
         upsertStmt.setInt(1, player.getId()); // Set the user ID
