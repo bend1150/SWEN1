@@ -2,16 +2,23 @@
 import java.util.Random;
 import Card.*;
 import User.*;
+import DB.*;
+import java.sql.*;
 
 public class BattleLogic {
 
 
-        static public int battle(User user1, User user2){
+        static public int battle(User user1, User user2) throws SQLException{
+
+            user1 = CardQuery.getDeckFromDB(user1);
+            user2 = CardQuery.getDeckFromDB(user2);
 
             int numberRound = 1;
             int victoryPlayer = 0;
             // 1: Player1 wins; 2: Player2 wins ; 3: Draw
             int victoryCard = 0;
+
+
 
             while(user1.getDeck().size()>0 && user2.getDeck().size()>0) {         //continue if both player still has card in deck
                 System.out.println("---------------Round "+numberRound+"---------------");
@@ -58,15 +65,17 @@ public class BattleLogic {
                 }
             }
 
+            //Maybe hier updateStack() zu DB damit die karten in der Tabelle übergeben wird (id wird auf den Gewinner geändert)
 
+            if(user1.getDeck().size()==0 && user2.getDeck().size()==0) {
+                return 3;
+            }
 
             if(user1.getDeck().size()==0){
                 victoryPlayer = 2;
             } else {
                 victoryPlayer = 1;
             }
-
-
             return victoryPlayer;
         }
 
@@ -116,35 +125,53 @@ public class BattleLogic {
             String card2Type = card2.getElementType();
 
             // Damage-Effectiveness
-            if (card1Type == "WATER" && card2Type == "FIRE"){
+            if (card1Type.equalsIgnoreCase("WATER") && card2Type.equalsIgnoreCase("FIRE")){
                 card1dmg = card1dmg * 2;
-            }   else if(card1Type == "FIRE" && card2Type =="WATER"){
+            }   else if(card1Type.equalsIgnoreCase("FIRE") && card2Type.equalsIgnoreCase("WATER")){
                 card1dmg = card1dmg / 2;
-            }   else if(card1Type == "NORMAL" && card2Type == "WATER"){
+            }   else if(card1Type.equalsIgnoreCase("NORMAL") && card2Type.equalsIgnoreCase("WATER")){
                 card1dmg = card1dmg * 2;
-            }   else if(card1Type == "WATER" && card2Type == "NORMAL"){
+            }   else if(card1Type.equalsIgnoreCase("WATER") && card2Type.equalsIgnoreCase("NORMAL")){
                 card1dmg = card1dmg / 2;
-            }   else if(card1Type == "FIRE" && card2Type == "NORMAL"){
+            }   else if(card1Type.equalsIgnoreCase("FIRE") && card2Type.equalsIgnoreCase("NORMAL")){
                 card1dmg = card1dmg * 2;
-            }   else if(card1Type == "NORMAL" && card2Type == "FIRE"){
+            }   else if(card1Type.equalsIgnoreCase("NORMAL") && card2Type.equalsIgnoreCase("FIRE")){
                 card1dmg = card1dmg / 2;
+            }   else if(card1Type.equalsIgnoreCase("ICE") && card2Type.equalsIgnoreCase("WATER")){      //Unique Feature
+                card1dmg = card1dmg * 2;
+            }   else if(card1Type.equalsIgnoreCase("WATER") && card2Type.equalsIgnoreCase("ICE")){
+                card1dmg = card1dmg /2;
+            }   else if(card1Type.equalsIgnoreCase("ICE") && card2Type.equalsIgnoreCase("FIRE")){
+                card1dmg = card1dmg/2;
+            }else if(card1Type.equalsIgnoreCase("FIRE") && card2Type.equalsIgnoreCase("ICE")){
+                card1dmg = card1dmg*2;
             }
-            // Unique feature here
 
-            if (card2Type == "WATER" && card1Type == "FIRE"){
+
+
+            if (card2Type.equals("WATER") && card1Type.equals("FIRE")){
                 card2dmg = card2dmg * 2;
-            }   else if(card2Type == "FIRE" && card1Type =="WATER"){
+            }   else if(card2Type.equals("FIRE") && card1Type.equals("WATER")){
                 card2dmg = card2dmg / 2;
-            }   else if(card2Type == "NORMAL" && card1Type == "WATER"){
+            }   else if(card2Type.equals("NORMAL") && card1Type.equals("WATER")){
                 card2dmg = card2dmg * 2;
-            }   else if(card2Type == "WATER" && card1Type == "NORMAL"){
+            }   else if(card2Type.equals("WATER") && card1Type.equals("NORMAL")){
                 card2dmg = card2dmg / 2;
-            }   else if(card2Type == "FIRE" && card1Type == "NORMAL"){
+            }   else if(card2Type.equals("FIRE") && card1Type.equals("NORMAL")){
                 card2dmg = card2dmg * 2;
-            }   else if (card2Type == "NORMAL" && card1Type == "FIRE") {
+            }   else if (card2Type.equals("NORMAL") && card1Type.equals("FIRE")) {
                 card2dmg = card2dmg / 2;
+            }   else if(card2Type.equals("ICE") && card1Type.equals("WATER")){
+                card2dmg = card2dmg * 2;
+            }   else if(card2Type.equals("WATER") && card1Type.equals("ICE")){
+                card2dmg = card2dmg /2;
+            }   else if(card2Type.equals("ICE") && card1Type.equals("FIRE")){
+                card2dmg = card2dmg/2;
+            }else if(card2Type.equals("FIRE") && card1Type.equals("ICE")){
+                card2dmg = card2dmg*2;
             }
-            // Unique feature here
+
+
 
 
             System.out.println(" => "+card1dmg + " VS " +card2dmg);

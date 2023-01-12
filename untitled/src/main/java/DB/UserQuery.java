@@ -1,7 +1,10 @@
 package DB;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.sql.*;
+import java.util.Scanner;
+
 import Card.*;
 import DB.*;
 import User.*;
@@ -34,18 +37,21 @@ public class UserQuery {
             // Insert the new user
             try (Connection connection = DriverManager.getConnection(url, user, pass);
                  PreparedStatement insertStmt = connection.prepareStatement("""
-                INSERT INTO users
-                (username, password, coins, elo)
-                VALUES (?,?,?,?);
-                """)) {
+            INSERT INTO users
+            (username, password, coins, elo, gamesCount, wins)
+            VALUES (?,?,?,?,?,?);
+            """)) {
                 insertStmt.setString(1, username);
                 insertStmt.setString(2, password);
                 insertStmt.setInt(3, 20);
                 insertStmt.setInt(4, 100);
+                insertStmt.setInt(5,0);
+                insertStmt.setInt(6,0);
                 insertStmt.execute();
             }
         }
     }
+
 
 
     public static User loginUser(String username, String password) throws SQLException {
@@ -61,8 +67,10 @@ public class UserQuery {
                 int id = rs.getInt("id");
                 int coins = rs.getInt("coins");
                 int elo = rs.getInt("elo");
+                int gamesCount = rs.getInt("gamesCount");
+                int wins = rs.getInt("wins");
                 System.out.println("You have successfully logged in!");
-                return new User(username, password, id, coins, elo);
+                return new User(username, password, id, coins, elo,gamesCount, wins);
             } else {
                 System.out.println("User not found!!!");
                 // if no match
@@ -71,71 +79,118 @@ public class UserQuery {
         }
     }
 
-    public static void updateEloStat(User winner, User loser) throws SQLException {
-        // Increase winner elo by 3
+
+    public static void updateStats(User winner, User loser) throws SQLException {
+        // Winner elo by +3 and wins by +1
         winner.setEloValue(winner.getEloValue() + 3);
+        winner.setWins(winner.getWins() + 1);
+        winner.setGamesCount(winner.getGamesCount()+1);
 
-        // Decrease loser elo by 5
+        // loser elo by -5
         loser.setEloValue(loser.getEloValue() - 5);
+        loser.setGamesCount(loser.getGamesCount()+1);
 
-        // update elo in db
+        // update elo and wins in db
         try (Connection connection = DriverManager.getConnection(url, user, pass);
-             PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET elo = ? WHERE username = ?")) {
+             PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET elo = ?, wins = ?, gamescount = ? WHERE id = ?")) {
             updateStmt.setInt(1, winner.getEloValue());
-            updateStmt.setString(2, winner.getUsername());
+            updateStmt.setInt(2, winner.getWins());
+            updateStmt.setInt(3,winner.getGamesCount());
+            updateStmt.setInt(4, winner.getId());
             updateStmt.executeUpdate();
 
             updateStmt.setInt(1, loser.getEloValue());
-            updateStmt.setString(2, loser.getUsername());
+            updateStmt.setInt(2, loser.getWins());
+            updateStmt.setInt(3,loser.getGamesCount());
+            updateStmt.setInt(4, loser.getId());
             updateStmt.executeUpdate();
         }
     }
 
-    public static void buyPackage(User player) throws SQLException {
-        // Check if the user has enough coins to buy a package
-        if (player.getCoins() < 5) {
-            // The user does not have enough coins to buy a package
-            System.out.println("You do not have enough coins to buy a package!");
-        } else {
-            // The user has enough coins to buy a package, so subtract 5 coins from their balance
-            player.setCoins(player.getCoins() - 5);
 
-            // Generate 4 random cards for the package
+    public static void showScoreBoard() throws SQLException {
 
-            Random rand = new Random();
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>[ Scoreboard]<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        System.out.printf("| %-5s | %-15s | %-10s | %-10s |\n", "elo", "username", "gamesCount", "winRatio");
+        System.out.println("----------------------------------------------------------------------");
 
-            for(int i=0; i < 4; i++) {
-                int cardType = rand.nextInt(2);     //random number between 1 and 2
-                Card card;
-                if(cardType == 0){
-                    card = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
-                } else {
-                    card = new SpellCard("1",1,1).generateRandomizedSpellcard();
-                }
-                // Add to stack
-                player.getStack().add(card);
-
-                // Add the cards to the cards table in the database
-                try (Connection connection = DriverManager.getConnection(url, user, pass);
-                     PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO cards (name, damage, element, cardType, userid) VALUES (?, ?, ?, ?, ?)")) {
-                    insertStmt.setString(1, card.getName());
-                    insertStmt.setInt(2, card.getDamage());
-                    insertStmt.setString(3, card.getElementType());
-                    insertStmt.setString(4, cardType==0 ? "MONSTER" : "SPELL");
-                    insertStmt.setInt(5, player.getId());
-                    insertStmt.executeUpdate();
-                }
-
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement selectStmt = connection.prepareStatement("SELECT username, elo, gamesCount, wins FROM users ORDER BY elo DESC")) {
+            ResultSet rs = selectStmt.executeQuery();
+            while (rs.next()) {
+                String username = rs.getString("username");
+                int elo = rs.getInt("elo");
+                int gamesCount = rs.getInt("gamesCount");
+                int wins = rs.getInt("wins");
+                float winRatio = (wins / (float) gamesCount) * 100;
+                System.out.printf("| %-5d | %-15s | %-10d | %-10.2f%% |\n", elo,username, gamesCount, winRatio);
             }
-            // Decrease coin -5 in DB
-            try (Connection connection = DriverManager.getConnection(url, user, pass);
-                 PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET coins = coins - 5 WHERE id = ?")) {
-                updateStmt.setInt(1, player.getId());
-                updateStmt.executeUpdate();
-            }
-
         }
+        System.out.println("----------------------------------------------------------------------");
     }
+
+
+    public static User editProfile(User player) throws SQLException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter new username (leave empty if you dont want to chagne it): ");
+        String newUsername = scanner.nextLine();
+        System.out.println("Enter old password: ");
+        String oldPassword = scanner.nextLine();
+        System.out.println("Enter new password (leave empty if you dont want to chagne it): ");
+        String newPassword = scanner.nextLine();
+
+        //verifying the old password and updating the new username and password
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement selectStmt = connection.prepareStatement("SELECT * FROM users WHERE id = ? AND password = ?")) {
+            selectStmt.setInt(1, player.getId());
+            selectStmt.setString(2, oldPassword);
+            ResultSet rs = selectStmt.executeQuery();
+            if (!rs.next()) {
+                System.out.println("Error: Incorrect password!");
+                return null;
+            }
+        }
+        if(!newUsername.isEmpty()){
+            player.setUsername(newUsername);
+        }
+        if(!newPassword.isEmpty()){
+            player.setPassword(newPassword);
+        }
+
+        //update to the database
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            String sql = "UPDATE users SET";
+            ArrayList<Object> values = new ArrayList<Object>();
+            if(!newUsername.isEmpty()){
+                sql += " username = ?,";
+                values.add(newUsername);
+            }
+            if(!newPassword.isEmpty()){
+                sql += " password = ?,";
+                values.add(newPassword);
+            }
+            if(values.size()>0){
+                sql = sql.substring(0, sql.length()-1);
+                sql += " WHERE id = ?";
+                values.add(player.getId());
+                PreparedStatement updateStmt = connection.prepareStatement(sql);
+                for (int i = 0; i < values.size(); i++) {
+                    updateStmt.setObject(i + 1, values.get(i));
+                }
+                updateStmt.execute();
+                System.out.println("Profile updated!");
+                return player;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+
+
 
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import Card.*;
 import User.*;
 import java.sql.*;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -13,9 +14,45 @@ public class CardQuery {
     private static final String user ="postgres";
     private static final String pass="pwd123456";
 
-    public static void showDeck(){
-
+    public static User getDeckFromDB(User player) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            // Retrieve the card IDs from the 'deck' table for the given user ID
+            PreparedStatement selectStmt = connection.prepareStatement("SELECT card1, card2, card3, card4 FROM deck WHERE userid = ?");
+            selectStmt.setInt(1, player.getId());
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                List<Card> deck = new ArrayList<>();
+                // Retrieve the corresponding card objects from the 'cards' table and add them to the user's deck list
+                for (int i = 1; i <= 4; i++) {
+                    int cardId = rs.getInt("card" + i);
+                    PreparedStatement selectCardStmt = connection.prepareStatement("SELECT * FROM cards WHERE id = ?");
+                    selectCardStmt.setInt(1, cardId);
+                    ResultSet cardRs = selectCardStmt.executeQuery();
+                    if (cardRs.next()) {
+                        String type = cardRs.getString("cardtype");
+                        if (type.equals("MONSTER")) {
+                            String name = cardRs.getString("name");
+                            String elementType = cardRs.getString("element");
+                            int damage = cardRs.getInt("damage");
+                            deck.add(new MonsterCard(name, elementType, damage, cardId));
+                        } else if (type.equals("SPELL")) {
+                            String elementType = cardRs.getString("element");
+                            int damage = cardRs.getInt("damage");
+                            deck.add(new SpellCard(elementType, damage, cardId));
+                        }
+                    }
+                }
+                player.setDeck(deck);
+                return player;
+            } else {
+                System.out.println("Deck not found");
+                return null;
+            }
+        }
     }
+
+
+
 
     public static void createDeck(User player) throws SQLException {
         // Connect to the database
@@ -111,6 +148,60 @@ public class CardQuery {
         }
 
         conn.close();
+    }
+
+
+
+    public static void buyPackage(User player) throws SQLException {            // Maybe should also return User so the stack gets updated?
+        // Check if the user has enough coins to buy a package
+        if (player.getCoins() < 5) {
+            // The user does not have enough coins to buy a package
+            System.out.println("You do not have enough coins to buy a package!");
+        } else {
+            // The user has enough coins to buy a package, so subtract 5 coins from their balance
+            player.setCoins(player.getCoins() - 5);
+
+            // Generate 4 random cards for the package
+
+            Random rand = new Random();
+
+            for(int i=0; i < 5; i++) {
+                int cardType = rand.nextInt(2);     //random number between 1 and 2
+                Card card;
+                if(cardType == 0){
+                    card = new MonsterCard("1","1",1,1).generateRandomizedMonsterCard();
+                } else {
+                    card = new SpellCard("1",1,1).generateRandomizedSpellcard();
+                }
+                // Add to stack
+                player.getStack().add(card);
+
+                // Add the cards to the cards table in the database
+                try (Connection connection = DriverManager.getConnection(url, user, pass);
+                     PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO cards (name, damage, element, cardType, userid) VALUES (?, ?, ?, ?, ?)")) {
+                    insertStmt.setString(1, card.getName());
+                    insertStmt.setInt(2, card.getDamage());
+                    insertStmt.setString(3, card.getElementType());
+                    insertStmt.setString(4, cardType==0 ? "MONSTER" : "SPELL");
+                    insertStmt.setInt(5, player.getId());
+                    insertStmt.executeUpdate();
+                }
+
+            }
+            // Decrease coin -5 in DB
+            try (Connection connection = DriverManager.getConnection(url, user, pass);
+                 PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET coins = coins - 5 WHERE id = ?")) {
+                updateStmt.setInt(1, player.getId());
+                updateStmt.executeUpdate();
+            }
+
+        }
+    }
+
+    public static User updateStack(User user1, User user2){
+        // This function belongs at the end of the BattleLogic so the
+        //  DB is updated with the current Version of the Stack and deck of the player
+        return null;
     }
 
 

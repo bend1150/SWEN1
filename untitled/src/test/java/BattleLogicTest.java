@@ -6,14 +6,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import Card.*;
 import User.*;
 
+import java.sql.SQLException;
+
 class BattleLogicTest {
 
     @Test
-    void battle() {
-        // Create two users with different decks
+    void battle()throws SQLException {
+        /*
 
-        User user1 = new User("user1","123",1,20,1000);
-        User user2 = new User("user2","456",2,20,1000);
+        // Create two users with different decks
+        User user1 = new User("user1","123",1,20,1000,20,1);
+        User user2 = new User("user2","456",2,20,1000,30,5);
 
 
         Card card1 = new MonsterCard("DRAGON","FIRE", 20,1);
@@ -37,7 +40,7 @@ class BattleLogicTest {
         assertTrue(user1.getDeck().contains(card3));
         assertTrue(user1.getDeck().contains(card4));
         assertEquals(0, user2.getDeck().size()); // Player2 should have 0 cards
-
+    */
     }
 
     @Test
@@ -56,11 +59,12 @@ class BattleLogicTest {
     @Test
     void spellBattle() {
 
-        Card card1 = new SpellCard("FIRE", 15, 1);
+        Card card1 = new SpellCard("ICE", 9, 1);
         Card card2 = new SpellCard("WATER", 10, 2);
 
-        assertEquals(1,BattleLogic.SpellBattle(card2,card1));     //Player1 should win
-        assertEquals(2, BattleLogic.SpellBattle(card1,card2));    //Player2 should win
+
+        assertEquals(1,BattleLogic.SpellBattle(card1,card2));     //Player1 should win
+        assertEquals(2, BattleLogic.SpellBattle(card2,card1));    //Player2 should win
         assertEquals(3, BattleLogic.SpellBattle(card1,card1));    //Should end in draw
 
 

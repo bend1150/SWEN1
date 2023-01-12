@@ -2,7 +2,7 @@ package DB;
 
 import java.sql.*;
 
-public class Database {
+public class DatabaseConnection {
 
      static Connection _connection = null;
     private static final String url = "jdbc:postgresql://localhost:5432/cardgame";

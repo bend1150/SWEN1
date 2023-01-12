@@ -8,7 +8,7 @@ public class MonsterCard extends Card {
         GOBLIN, DRAGON, ORC, WIZZARD, KNIGHT, ELF, KRAKEN
     }
     private enum type{
-        WATER, FIRE, NORMAL
+        WATER, FIRE, NORMAL, ICE
     }
 
     public MonsterCard(String name, String elementType,int damage, int cardID) {        //EingabeParameter nur für test
@@ -37,7 +37,7 @@ public class MonsterCard extends Card {
         int num = rn.nextInt(7);                // Generate a number between 0-6
         this.name = names.values()[num].toString();
 
-        num = rn.nextInt(3);                    // Generate a number between 0-2
+        num = rn.nextInt(4);                    // Generate a number between 0-3
         this.elementType = type.values()[num].toString();
 
         num = rn.nextInt(50);                   // Generate a number between 0-49

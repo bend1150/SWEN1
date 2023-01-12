@@ -9,6 +9,44 @@ public class User {
     private String username;
     private String password;
 
+    private int coins = 20;
+    private int eloValue = 100;
+    private int id;
+    private List<Card> deck = new ArrayList<Card>();
+
+    private List<Card> stack = new ArrayList<Card>();
+
+    private int gamesCount;
+
+    private int wins;
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getGamesCount() {
+        return gamesCount;
+    }
+
+    public void setGamesCount(int gamesCount) {
+        this.gamesCount = gamesCount;
+    }
+
+
+    public User(String username, String password, int id, int coins, int eloValue, int gamesCount, int wins) {
+        this.username = username;
+        this.password = password;
+        this.id = id;
+        this.coins = coins;
+        this.eloValue = eloValue;
+        this.gamesCount = gamesCount;
+        this.wins = wins;
+    }
+
     public int getId() {
         return id;
     }
@@ -17,23 +55,8 @@ public class User {
         this.id = id;
     }
 
-    private int id;
-    private List<Card> deck = new ArrayList<Card>();
 
 
-    private List<Card> stack = new ArrayList<Card>();
-
-    private int coins = 20;
-
-    private int eloValue = 100;
-
-    public User(String username, String password, int id, int coins, int eloValue) {
-        this.username = username;
-        this.password = password;
-        this.id = id;
-        this.coins = coins;
-        this.eloValue = eloValue;
-    }
 
     public String getUsername() {
         return username;
