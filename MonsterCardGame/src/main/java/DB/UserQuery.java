@@ -76,6 +76,11 @@ public class UserQuery {
                 int elo = rs.getInt("elo");
                 int gamesCount = rs.getInt("gamesCount");
                 int wins = rs.getInt("wins");
+                String token = "Basic " + username + "-mtcgToken";
+                PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET token = ? WHERE id = ?");
+                updateStmt.setString(1, token);
+                updateStmt.setInt(2, id);
+                updateStmt.executeUpdate();
                 System.out.println("You have successfully logged in!");
                 //return new User(username, password, id, coins, elo,gamesCount, wins);
                 return 0;
@@ -88,6 +93,34 @@ public class UserQuery {
         }
     }
 
+    public static User getUserInfoByToken(String token) {
+        User player = null;
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement selectStmt = connection.prepareStatement("SELECT * FROM users WHERE token = ?")) {
+            selectStmt.setString(1, token);
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                // if user exist return User object
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                int id = rs.getInt("id");
+                int coins = rs.getInt("coins");
+                int elo = rs.getInt("elo");
+                int gamesCount = rs.getInt("gamesCount");
+                int wins = rs.getInt("wins");
+                player = new User(username, password, id, coins, elo,gamesCount, wins);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return player;
+    }
+
+    public static int logout(User user){
+
+
+        return 0;
+    }
 
     public static void updateStats(User winner, User loser) throws SQLException {
         // Winner elo by +3 and wins by +1

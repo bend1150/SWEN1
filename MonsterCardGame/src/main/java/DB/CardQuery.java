@@ -53,6 +53,52 @@ public class CardQuery {
     }
 
 
+    public static int showDeck(User player) {
+
+
+        return 0;
+    }
+
+    public static int configureDeck(User player, String card1, String card2, String card3, String card4) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            String checkSql = "SELECT * FROM cards WHERE cardid = ? OR cardid = ? OR cardid = ? OR cardid = ?";
+            try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+                checkStmt.setString(1, card1);
+                checkStmt.setString(2, card2);
+                checkStmt.setString(3, card3);
+                checkStmt.setString(4, card4);
+                ResultSet rs = checkStmt.executeQuery();
+                int count = 0;
+                while (rs.next()) {
+                    count++;
+                }
+                if (count != 4) {
+                    return 1; // not all cards exist in the cards table
+                }
+            }
+            // The inserts update the row if the userid already exist, to avoid many userid's
+            String insertSql = "INSERT INTO deck (userid, card1, card2, card3, card4) VALUES (?, ?, ?, ?, ?) ON CONFLICT (userid) DO UPDATE SET card1 = ?, card2 = ?, card3 = ?, card4 = ?";
+            try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
+                insertStmt.setInt(1, player.getId());
+                insertStmt.setString(2, card1);
+                insertStmt.setString(3, card2);
+                insertStmt.setString(4, card3);
+                insertStmt.setString(5, card4);
+                insertStmt.setString(6, card1);
+                insertStmt.setString(7, card2);
+                insertStmt.setString(8, card3);
+                insertStmt.setString(9, card4);
+
+                insertStmt.executeUpdate();
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+
 
 
     public static void createDeck(User player) throws SQLException {
@@ -213,28 +259,31 @@ public class CardQuery {
         return null;
     }
 
-    public static int createPackage(List<Card> myCard){
-
-
+    public static int createPackage(List<Card> myCard, User player){
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String insertSql = "INSERT INTO cards (id, name, damage cardid) VALUES (?, ?, ?)";
+            String insertSql = "INSERT INTO cards (name, damage, cardid,element,cardtype) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
                 for(Card card: myCard){
-                    statement.setInt(1, card.getId());
-                    statement.setString(2, card.getName());
-                    statement.setFloat(3, card.getDamage());
-                    //statement.setString(3, card.getId());
+                    statement.setString(1, card.getName());
+                    statement.setFloat(2, card.getDamage());
+                    statement.setString(3, card.getCardId());
+                    statement.setString(4,card.getElementType());
+                    //statement.setInt(5,player.getId());
+                    if(card instanceof SpellCard){
+                        statement.setString(5, "SPELL");
+                    } else if(card instanceof MonsterCard) {
+                        statement.setString(5,"MONSTER");
+                    }
+
+                    //statement.setString(4, /*insert here*/);
                     statement.executeUpdate();
                 }
                 return 0;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return 1;
+            return -1;
         }
     }
-
-
-
 }

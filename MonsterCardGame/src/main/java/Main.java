@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import httpserver.service.LoginService;
 import httpserver.service.UserService;
+import httpserver.service.configureDeckService;
 import httpserver.service.createPackageService;
 import httpserver.utils.Router;  //Router
 import httpserver.server.Server; //Router
@@ -38,6 +39,7 @@ public class Main {
         router.addService("/users", new UserService());
         router.addService("/sessions", new LoginService());
         router.addService("/packages", new createPackageService());
+        router.addService("/deck", new configureDeckService());
 
 
         return router;
