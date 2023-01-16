@@ -42,7 +42,6 @@ public class Main {
         router.addService("/stats", new statsService());
         router.addService("/score", new statsService());
 
-
         return router;
     }
 

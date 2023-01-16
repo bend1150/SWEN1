@@ -11,24 +11,23 @@ import java.sql.SQLException;
 class BattleLogicTest {
 
     @Test
-    void battle()throws SQLException {
-        /*
+    void battle(){
+
 
         // Create two users with different decks
         User user1 = new User("user1","123",1,20,1000,20,1);
         User user2 = new User("user2","456",2,20,1000,30,5);
 
 
-        Card card1 = new MonsterCard("DRAGON","FIRE", 20,1);
-        Card card2 = new MonsterCard("GOBLIN","WATER", 16,2);
-        Card card3 = new MonsterCard("TROLL","FIRE", 15,3);
-        Card card4 = new MonsterCard("ORC","NORMAL", 5,4);
+        Card card1 = new MonsterCard("DRAGON","FIRE", 20,1,"1234");
+        Card card2 = new MonsterCard("GOBLIN","WATER", 16,2,"2345");
+        Card card3 = new MonsterCard("TROLL","FIRE", 15,3,"3456");
+        Card card4 = new MonsterCard("ORC","NORMAL", 5,4,"4567");
 
         user1.getDeck().add(card1);
         user1.getDeck().add(card2);
         user2.getDeck().add(card3);
         user2.getDeck().add(card4);
-
 
 
         // Call the battle method and assert the result
@@ -37,10 +36,10 @@ class BattleLogicTest {
 
         // Check that the cards have been moved to the correct decks
         assertEquals(4, user1.getDeck().size()); // Player1 should have 4 cards
-        assertTrue(user1.getDeck().contains(card3));
-        assertTrue(user1.getDeck().contains(card4));
+        assertTrue(user1.getDeck().contains(card3));       // Player1 should have cards from Player2
+        assertTrue(user1.getDeck().contains(card4));        // Player1 should have cards from Player2
         assertEquals(0, user2.getDeck().size()); // Player2 should have 0 cards
-    */
+
     }
 
     @Test

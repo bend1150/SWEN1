@@ -1,0 +1,73 @@
+Protokoll(MTCG)
+
+Die Basis Klassen sind:
+Users – repräsentiert die Spieler im Spiel, es hat folgende Eigenschaften:
+•	username
+•	password
+•	id
+•	coins
+•	eloValue
+•	gamesCount
+•	wins
+
+Card – repräsentiert die Spielkarten, es hat folgende Eigenschaften:
+•	cardid
+•	id
+•	name
+•	damage
+•	elementType
+
+Die CardQuery-Klasse beinhaltet alle Methoden welches mit der Datenbank interagieren.
+Dazu gehören das Konfigurieren von Decks, Kaufen von Packages und das Erstellen von Packages und auch das Anzeigen von dem aktuellen Karten.
+
+Die UserQuery-Klasse beinhaltet User-basierten Methoden welches mit der Daten interagiert, dazu gehört das Login, Registrierung und das Updaten der aktuellen Stats.
+Die BattleLogic-Klasse beinhalte die Logik für die Kämpfe, diese inkudiert verschiedene Spezialregeln (z.B.: Wasser fügt mehr Schaden gegen Feuer).
+
+Unit Test
+Für die folgende Unit-Tests werden hartkodierte Zeilen in der Datenbank benötigt:
+Für registerUser() & loginUser():
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3304,'TestUser','123',0,0,0,0);
+Für editProfile():
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3301,'editProfileTest','5',0,0,0,0);
+
+
+Für updateStats() & showDeck():
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3302,'winnerTest','winner123',20,100,0,0);
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3303,'loserTest','loser123',20,100,0,0);
+
+Für configureDeck():
+INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3301,'WATERGOBLIN','10.0','WATER','MONSTER',3304,'12345');
+
+INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3302,'FIREGOBLIN','15.0','WATER','MONSTER',3304,'23456');
+
+INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3303,'ORK','10.0','NORMAL','MONSTER',3304,'34567');
+
+INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3304,'KNIGHT','10.0','NORMAL','MONSTER',3304,'45678');
+Diese hardkodierten Befehle werden benötigt da die Methoden die Informationen aus der Datenbank holen.
+
+Datenbank
+Die Datenbank heißt „cardgame“ und hat 3 Tabellen.
+Tabellen: 
+users
+ 	attribute: id, username, password, coins, elo, gamescount, wins, token
+cards
+	attribute: id, name, damage, element, cardtype, userid, cardid
+ 
+deck
+	id, userid, card1, card2, card3, card4
+ 
+Die Attribute card1,card2,card3,card4 repräsentieren die cardid von der Tabelle “cards”.
+Für die Tabelle deck wurde zusätzlich noch folgender Befehl hinzugefügt:
+ALTER TABLE deck ADD CONTRAINT deck_userid_unique UNIQUE (userid);
+Somit hat jede userid nur eine Reihe, damit werden beim Rekonfigurieren des Decks keine neue Einträge hinzugefügt.
+
+GIT
+Der link zu meinem Git-Repository befindet im Ordner des Projekts mit den Namen: README.txt
+
+Time spent
+ An das Projekt wurde ungefähr 45-50 Stunden gearbeitet.
+
+
+
+
+

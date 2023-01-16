@@ -14,8 +14,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="JUnit5 Test Class" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -66,14 +66,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="MonsterCardGame" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.BattleLogicTest.mixedBattle">
     <configuration name="BattleLogicTest.battle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MonsterCardGame" />
       <option name="PACKAGE_NAME" value="" />
@@ -104,7 +97,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CardQueryTest.buyPackage" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BattleLogicTest.spellBattle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="MonsterCardGame" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BattleLogicTest" />
+      <option name="METHOD_NAME" value="spellBattle" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserQueryTest.editProfile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MonsterCardGame" />
       <extension name="coverage">
         <pattern>
@@ -113,8 +116,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="DB" />
-      <option name="MAIN_CLASS_NAME" value="DB.CardQueryTest" />
-      <option name="METHOD_NAME" value="buyPackage" />
+      <option name="MAIN_CLASS_NAME" value="DB.UserQueryTest" />
+      <option name="METHOD_NAME" value="editProfile" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -122,11 +125,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="JUnit.CardQueryTest.buyPackage" />
         <item itemvalue="JUnit.BattleLogicTest.mixedBattle" />
+        <item itemvalue="JUnit.BattleLogicTest.spellBattle" />
         <item itemvalue="JUnit.BattleLogicTest.monsterBattle" />
         <item itemvalue="JUnit.BattleLogicTest.battle" />
+        <item itemvalue="JUnit.UserQueryTest.editProfile" />
       </list>
     </recent_temporary>
   </component>
@@ -157,7 +160,7 @@
       <workItem from="1673645238677" duration="3732000" />
       <workItem from="1673694979078" duration="27908000" />
       <workItem from="1673782034462" duration="1181000" />
-      <workItem from="1673869678329" duration="19958000" />
+      <workItem from="1673869678329" duration="33222000" />
     </task>
     <servers />
   </component>

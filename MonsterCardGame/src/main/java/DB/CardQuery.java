@@ -146,13 +146,7 @@ public class CardQuery {
     }
 
 
-    public static void logout(User player) throws SQLException {                        //removes token from user
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
-             PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET token = null WHERE id = ?")) {
-            updateStmt.setInt(1, player.getId());
-            int rowsAffected = updateStmt.executeUpdate();
-        }
-    }
+
 
     public static int acquirePackage(User player) {
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
@@ -201,17 +195,17 @@ public class CardQuery {
         // Connect to the database
         Connection conn = DriverManager.getConnection(url, user, pass);
 
-        // Create a scanner to read input from the user
+        // Read input
         Scanner scanner = new Scanner(System.in);
 
-        // Prompt the user for the IDs of the cards they want to add to their deck
+        // input ids of cards
         System.out.println("Enter the IDs of the cards you want to add to your deck, separated by spaces: ");
         String input = scanner.nextLine();
 
-        // Split the input into an array of card IDs
+        // split into array
         String[] cardIds = input.split(" ");
 
-        // Retrieve the selected cards from the 'cards' table
+
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM cards WHERE id IN (?, ?, ?, ?) AND userid = ?");
 
         stmt.setInt(1, Integer.parseInt(cardIds[0])); // Set the first card ID
@@ -236,13 +230,13 @@ public class CardQuery {
             return;
         }
 
-        // Use an upsert statement to insert a row into the 'deck' table for the player
+
         PreparedStatement upsertStmt = conn.prepareStatement("INSERT INTO deck (userid, card1, card2, card3, card4) VALUES (?, ?, ?, ?, ?) ON CONFLICT (userid) DO UPDATE SET card1 = ?, card2 = ?, card3 = ?, card4 = ?");
         upsertStmt.setInt(1, player.getId()); // Set the user ID
         upsertStmt.setInt(2, allowedCardIds.get(0)); // Set the first card ID
         upsertStmt.setInt(3, allowedCardIds.get(1)); //
 
-        // Set the second card ID
+
         upsertStmt.setInt(4, allowedCardIds.get(2)); // Set the third card ID
         upsertStmt.setInt(5, allowedCardIds.get(3)); // Set the fourth card ID
         upsertStmt.setInt(6, allowedCardIds.get(0)); // Set the first card ID (for update)
@@ -251,7 +245,6 @@ public class CardQuery {
         upsertStmt.setInt(9, allowedCardIds.get(3)); // Set the fourth card ID (for update)
         upsertStmt.executeUpdate();
 
-        // Close the connection to the database
         conn.close();
     }
 
@@ -260,8 +253,6 @@ public class CardQuery {
     public static List<Card> showStack(User player) throws SQLException {
 
         try(Connection conn = DriverManager.getConnection(url, user, pass);
-        //Statement stmt = conn.createStatement();
-        //ResultSet rs = stmt.executeQuery("SELECT * FROM cards WHERE userid= " + player.getId());
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM cards WHERE userid= ?")) {
 
             stmt.setInt(1, player.getId());

@@ -8,10 +8,10 @@ import java.sql.*;
 public class BattleLogic {
 
 
-        static public int battle(User user1, User user2) throws SQLException{
+        static public int battle(User user1, User user2){
 
-            user1 = CardQuery.getDeckFromDB(user1);
-            user2 = CardQuery.getDeckFromDB(user2);
+            //user1 = CardQuery.getDeckFromDB(user1);
+            //user2 = CardQuery.getDeckFromDB(user2);
 
             int numberRound = 1;
             int victoryPlayer = 0;
