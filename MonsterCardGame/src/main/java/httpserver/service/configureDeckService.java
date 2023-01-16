@@ -30,14 +30,11 @@ public class configureDeckService implements Service {
             if(jsonArray.length() != 4) {
                 return new Response(HttpStatus.BAD_REQUEST, ContentType.JSON, "Amount of cards is invalid");
             }
-
             User player = DB.UserQuery.getUserInfoByToken(token);
             String card1 = jsonArray.getString(0);
             String card2 = jsonArray.getString(1);
             String card3 = jsonArray.getString(2);
             String card4 = jsonArray.getString(3);
-
-
             try {
                 int result = CardQuery.configureDeck(player, card1,card2,card3,card4);
                 if(result == 0){
@@ -52,9 +49,19 @@ public class configureDeckService implements Service {
             }
 
             return new Response(HttpStatus.OK, ContentType.PLAIN_TEXT, response);
+        } else if(request.getMethod() == Method.GET) {
+            String token = request.getHeaderMap().getHeader("Authorization");
+            String response;
+
+
+            User player = DB.UserQuery.getUserInfoByToken(token);
+            response =CardQuery.showDeck(player);
+
+
+            return new Response(HttpStatus.OK, ContentType.PLAIN_TEXT, response);
         } else {
-            return new Response(HttpStatus.UNAUTHORIZED, ContentType.PLAIN_TEXT, "Invalid request method");
+            return new Response(HttpStatus.UNAUTHORIZED, ContentType.PLAIN_TEXT, "There was a problem showing your deck!");
         }
-        
+
     }
 }

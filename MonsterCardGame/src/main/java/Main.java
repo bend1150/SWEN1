@@ -7,10 +7,7 @@ import User.*;
 import java.util.Scanner;
 
 
-import httpserver.service.LoginService;
-import httpserver.service.UserService;
-import httpserver.service.configureDeckService;
-import httpserver.service.createPackageService;
+import httpserver.service.*;
 import httpserver.utils.Router;  //Router
 import httpserver.server.Server; //Router
 import httpserver.server.Service;
@@ -40,6 +37,10 @@ public class Main {
         router.addService("/sessions", new LoginService());
         router.addService("/packages", new createPackageService());
         router.addService("/deck", new configureDeckService());
+        router.addService("/transactions", new acquirePackageService());
+        router.addService("/cards", new showCardsService());
+        router.addService("/stats", new statsService());
+        router.addService("/score", new statsService());
 
 
         return router;

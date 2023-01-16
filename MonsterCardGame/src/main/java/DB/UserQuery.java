@@ -150,12 +150,12 @@ public class UserQuery {
     }
 
 
-    public static void showScoreBoard() throws SQLException {
+    public static String showScoreBoard() throws SQLException {
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>[ Scoreboard]<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         System.out.printf("| %-5s | %-15s | %-10s | %-10s |\n", "elo", "username", "gamesCount", "winRatio");
         System.out.println("----------------------------------------------------------------------");
-
+        String response ="";
         try (Connection connection = DriverManager.getConnection(url, user, pass);
              PreparedStatement selectStmt = connection.prepareStatement("SELECT username, elo, gamesCount, wins FROM users ORDER BY elo DESC")) {
             ResultSet rs = selectStmt.executeQuery();
@@ -164,11 +164,21 @@ public class UserQuery {
                 int elo = rs.getInt("elo");
                 int gamesCount = rs.getInt("gamesCount");
                 int wins = rs.getInt("wins");
-                float winRatio = (wins / (float) gamesCount) * 100;
+
+                float winRatio = 0;
+                if (gamesCount != 0) {
+                    winRatio = (wins / (float) gamesCount) * 100;           //so divide by 0 not possible
+                }
+
                 System.out.printf("| %-5d | %-15s | %-10d | %-10.2f%% |\n", elo,username, gamesCount, winRatio);
+                response += String.format("| %-5d | %-15s | %-10d | %-10.2f%% |\n", elo,username, gamesCount, winRatio);
             }
         }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
         System.out.println("----------------------------------------------------------------------");
+        return response;
     }
 
 

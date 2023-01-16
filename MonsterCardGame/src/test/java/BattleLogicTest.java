@@ -49,8 +49,8 @@ class BattleLogicTest {
         Card card1 = new MonsterCard("Goblin", "WATER", 10,1,"15");
         Card card2 = new MonsterCard("Troll", "FIRE", 15,2,"15");
 
-        assertEquals(2,BattleLogic.MonsterBattle(card1,card2)); //Player1 should win
-        assertEquals(1,BattleLogic.MonsterBattle(card2,card1)); //Player2 should win
+        assertEquals(2,BattleLogic.MonsterBattle(card1,card2)); //Player2 should win
+        assertEquals(1,BattleLogic.MonsterBattle(card2,card1)); //Player1 should win
         assertEquals(3,BattleLogic.MonsterBattle(card1,card1)); // Should end in draw
 
 

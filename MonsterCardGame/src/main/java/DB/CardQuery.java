@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import Card.*;
 import User.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.sql.*;
 import java.util.Random;
 import java.util.Scanner;
@@ -53,27 +56,71 @@ public class CardQuery {
     }
 
 
-    public static int showDeck(User player) {
+    public static String showDeck(User player) {
+        String response = "";
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            String selectSql = "SELECT card1,card2,card3,card4 FROM deck WHERE userid = ?";
+            try (PreparedStatement statement = connection.prepareStatement(selectSql)) {
+                statement.setInt(1, player.getId());
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    String card1 = rs.getString("card1");
+                    String card2 = rs.getString("card2");
+                    String card3 = rs.getString("card3");
+                    String card4 = rs.getString("card4");
+                    String[] cards = {card1, card2, card3, card4};
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>[Deck]<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                    for (String card : cards) {
+                        String selectCardSql = "SELECT * FROM cards WHERE cardid = ?";
+                        try (PreparedStatement cardStatement = connection.prepareStatement(selectCardSql)) {
+                            cardStatement.setString(1, card);
+                            ResultSet cardRs = cardStatement.executeQuery();
+                            if (cardRs.next()) {
+                                                                                                                                                   // Output the card
+                                System.out.println("Name: " + cardRs.getString("name") + "("+cardRs.getFloat("damage")+" Damage)");
+                                response += "Name: "+ cardRs.getString("name")+"("+cardRs.getFloat("damage")+")"+"\n";
+                                /*
+                                System.out.println("id: " + cardRs.getInt("id"));
+                                System.out.println("name: " + cardRs.getString("name"));
+                                System.out.println("damage: " + cardRs.getFloat("damage"));
+                                System.out.println("element: " + cardRs.getString("element"));
+                                System.out.println("cardtype: " + cardRs.getString("cardtype"));
+                                System.out.println("cardid: " + cardRs.getString("cardid"));
+                                */
 
-
-        return 0;
+                            }
+                        }
+                    }
+                }
+                return response;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return response;
+        }
     }
+
+
+
+
 
     public static int configureDeck(User player, String card1, String card2, String card3, String card4) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String checkSql = "SELECT * FROM cards WHERE cardid = ? OR cardid = ? OR cardid = ? OR cardid = ?";
+            String checkSql = "SELECT * FROM cards WHERE userid=? AND(cardid = ? OR cardid = ? OR cardid = ? OR cardid = ?)";
             try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
-                checkStmt.setString(1, card1);
-                checkStmt.setString(2, card2);
-                checkStmt.setString(3, card3);
-                checkStmt.setString(4, card4);
+                checkStmt.setInt(1,player.getId());
+                checkStmt.setString(2, card1);
+                checkStmt.setString(3, card2);
+                checkStmt.setString(4, card3);
+                checkStmt.setString(5, card4);
                 ResultSet rs = checkStmt.executeQuery();
                 int count = 0;
                 while (rs.next()) {
                     count++;
                 }
                 if (count != 4) {
-                    return 1; // not all cards exist in the cards table
+                    return 1; // not all cards exist in cards table
                 }
             }
             // The inserts update the row if the userid already exist, to avoid many userid's
@@ -97,6 +144,55 @@ public class CardQuery {
             return -1;
         }
     }
+
+
+    public static void logout(User player) throws SQLException {                        //removes token from user
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET token = null WHERE id = ?")) {
+            updateStmt.setInt(1, player.getId());
+            int rowsAffected = updateStmt.executeUpdate();
+        }
+    }
+
+    public static int acquirePackage(User player) {
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            connection.setAutoCommit(false);
+            // check if enough coins
+            String checkCoinsSql = "SELECT coins FROM users WHERE id = ?";
+            try (PreparedStatement checkCoinsStmt = connection.prepareStatement(checkCoinsSql)) {
+                checkCoinsStmt.setInt(1, player.getId());
+                ResultSet checkCoinsRs = checkCoinsStmt.executeQuery();
+                if (checkCoinsRs.next()) {
+                    int coins = checkCoinsRs.getInt("coins");
+                    if (coins < 5) {
+                        // player does not have enough money
+                        return 1;
+                    }
+                }
+            }
+            // query -5 to db
+            String updateCoinsSql = "UPDATE users SET coins = coins - 5 WHERE id = ?";
+            try (PreparedStatement updateCoinsStmt = connection.prepareStatement(updateCoinsSql)) {
+                updateCoinsStmt.setInt(1, player.getId());
+                updateCoinsStmt.executeUpdate();
+            }
+            // change userid on table
+            String acquirePackageSql = "UPDATE cards SET userid = ? WHERE id IN (SELECT id FROM cards WHERE userid IS NULL ORDER BY id LIMIT 5)";
+            try (PreparedStatement acquirePackageStmt = connection.prepareStatement(acquirePackageSql)) {
+                acquirePackageStmt.setInt(1, player.getId());
+                int rowsAffected = acquirePackageStmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    return 2;
+                }
+            }
+            connection.commit();
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
 
 
 
@@ -161,42 +257,51 @@ public class CardQuery {
 
 
 
-    public static void showStack(User player) throws SQLException {
-        Connection conn = DriverManager.getConnection(url, user, pass);
+    public static List<Card> showStack(User player) throws SQLException {
 
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM cards WHERE userid= " + player.getId());
+        try(Connection conn = DriverManager.getConnection(url, user, pass);
+        //Statement stmt = conn.createStatement();
+        //ResultSet rs = stmt.executeQuery("SELECT * FROM cards WHERE userid= " + player.getId());
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM cards WHERE userid= ?")) {
 
-        List<Card> stack = new ArrayList<>();
+            stmt.setInt(1, player.getId());
+            ResultSet rs = stmt.executeQuery();
 
-        System.out.println("Your stack: ");
-        if (!rs.next()) {
-            System.out.println("You have no cards in your stack!");
-        } else {
-            do {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int damage = rs.getInt("damage");
-                String element = rs.getString("element");
-                String cardType = rs.getString("cardtype");
-                int user = rs.getInt("userid");
+            List<Card> stack = new ArrayList<>();
 
-                if ("MONSTER".equals(cardType)) {
-                    //MonsterCard card = new MonsterCard(name, element, damage, id);
-                    System.out.println("Cardnr.:" + id + " " + element + name + "(" + damage + ")");
-                    //stack.add(card);
+            if (!rs.next()) {
+                System.out.println("You have no cards in your stack!");
+            } else {
+                do {
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    float damage = rs.getFloat("damage");
+                    String element = rs.getString("element");
+                    String cardType = rs.getString("cardtype");
+                    String cardId = rs.getString("cardid");
+                    int user = rs.getInt("userid");
 
-                } else if ("SPELL".equals(cardType)) {
-                    //SpellCard card = new SpellCard(element,damage,id);
-                    System.out.println("Cardnr.:" + id + " " + element + "SPELL" + "(" + damage + ")");
-                    //stack.add(card);
-                }
-            } while (rs.next());
+                    if ("MONSTER".equals(cardType)) {
+                        MonsterCard card = new MonsterCard(name, element, damage, id, cardId);
+                        stack.add(card);
+
+                    } else if ("SPELL".equals(cardType)) {
+                        SpellCard card = new SpellCard(name, element, damage, id, cardId);
+                        stack.add(card);
+                    }
+                } while (rs.next());
+            }
+            conn.close();
+            return stack;
+        } catch (SQLException ex){
+            System.out.println(ex);
+            return null;
         }
-
-        conn.close();
     }
 
+
+
+    // OLD VERSION
     public static /*void*/ int buyPackage(User player) throws SQLException {            // Maybe should also return User so the stack gets updated?
         // Check if the user has enough coins to buy a package
         if (player.getCoins() < 5) {

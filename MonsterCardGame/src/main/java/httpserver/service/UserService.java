@@ -48,6 +48,4 @@ public class UserService implements Service {
             return new Response(HttpStatus.BAD_REQUEST, ContentType.PLAIN_TEXT, "Invalid request method");
         }
     }
-
-
 }
