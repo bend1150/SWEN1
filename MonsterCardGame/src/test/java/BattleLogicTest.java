@@ -12,8 +12,6 @@ class BattleLogicTest {
 
     @Test
     void battle(){
-
-
         // Create two users with different decks
         User user1 = new User("user1","123",1,20,1000,20,1);
         User user2 = new User("user2","456",2,20,1000,30,5);
@@ -39,7 +37,20 @@ class BattleLogicTest {
         assertTrue(user1.getDeck().contains(card3));       // Player1 should have cards from Player2
         assertTrue(user1.getDeck().contains(card4));        // Player1 should have cards from Player2
         assertEquals(0, user2.getDeck().size()); // Player2 should have 0 cards
+    }
+    @Test
+    void battleinfinity(){
+        User user1 = new User("user1","123",1,20,1000,20,1);
+        User user2 = new User("user2","456",2,20,1000,30,5);
 
+        Card card1 = new MonsterCard("DRAGON","FIRE", 20,1,"1234");
+        Card card2 = new MonsterCard("DRAGON","FIRE", 20,1,"1234");
+
+        user1.getDeck().add(card1);
+        user2.getDeck().add(card2);
+
+        int result = BattleLogic.battle(user1,user2);
+        assertEquals(3,result);                 //returns 3 if more than 99 rounds => draw
     }
 
     @Test

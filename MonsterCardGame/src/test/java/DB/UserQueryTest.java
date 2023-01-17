@@ -103,19 +103,19 @@ class UserQueryTest {
     @Test
     void editProfile() {        //oldPassword & newPassword needs to be changed in every Unit Test (look into DB to see current password)
         // Create a test user
-        User testUser = new User("editProfileTest", "5", 3301, 0, 0, 0, 0);
+        User testUser = new User("editProfileTest", "123", 3301, 0, 0, 0, 0);
 
         // Update the user's name and password using the editProfile function
         User updatedUser = null;
         try {
-            updatedUser = UserQuery.editProfileNew(testUser,"editProfileTest","5","6");
+            updatedUser = UserQuery.editProfileNew(testUser,"editProfileTest","123","123");
         } catch (SQLException e) {
             fail("Error during test");
         }
 
         // Changes Password
         assertNotNull(updatedUser);
-        assertEquals("editProfileTest", updatedUser.getUsername());
-        assertEquals("6", updatedUser.getPassword());
+        assertEquals("editProfileTest", updatedUser.getUsername());     //new username check
+        assertEquals("123", updatedUser.getPassword());                   //new password check
     }
 }

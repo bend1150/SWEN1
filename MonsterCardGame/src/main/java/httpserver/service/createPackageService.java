@@ -38,7 +38,7 @@ public class createPackageService implements Service{
                 float damage = (float) jsonObject.getDouble("Damage");
                 String elementType = "NORMAL";
 
-                if(name.contains("FIRE")){
+                if(name.contains("FIRE")){              //elementtype
                     elementType ="FIRE";
                 }
                 if(name.contains("WATER")){

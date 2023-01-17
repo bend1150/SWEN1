@@ -28,7 +28,7 @@ public class CardQuery {
                 // Retrieve the corresponding card objects from the 'cards' table and add them to the user's deck list
                 for (int i = 1; i <= 4; i++) {
                     int cardId = rs.getInt("card" + i);
-                    PreparedStatement selectCardStmt = connection.prepareStatement("SELECT * FROM cards WHERE id = ?");
+                    PreparedStatement selectCardStmt = connection.prepareStatement("SELECT * FROM cards WHERE id = ?"); //jede einzelne karte wird geholt
                     selectCardStmt.setInt(1, cardId);
                     ResultSet cardRs = selectCardStmt.executeQuery();
                     if (cardRs.next()) {
@@ -107,7 +107,7 @@ public class CardQuery {
 
     public static int configureDeck(User player, String card1, String card2, String card3, String card4) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String checkSql = "SELECT * FROM cards WHERE userid=? AND(cardid = ? OR cardid = ? OR cardid = ? OR cardid = ?)";
+            String checkSql = "SELECT * FROM cards WHERE userid=? AND(cardid = ? OR cardid = ? OR cardid = ? OR cardid = ?)";       // schaut in cards table nach dem karten
             try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
                 checkStmt.setInt(1,player.getId());
                 checkStmt.setString(2, card1);
@@ -157,7 +157,7 @@ public class CardQuery {
                 checkCoinsStmt.setInt(1, player.getId());
                 ResultSet checkCoinsRs = checkCoinsStmt.executeQuery();
                 if (checkCoinsRs.next()) {
-                    int coins = checkCoinsRs.getInt("coins");
+                    int coins = checkCoinsRs.getInt("coins");       //check coins
                     if (coins < 5) {
                         // player does not have enough money
                         return 1;
@@ -261,7 +261,7 @@ public class CardQuery {
             List<Card> stack = new ArrayList<>();
 
             if (!rs.next()) {
-                System.out.println("You have no cards in your stack!");
+                System.out.println("You have no cards in your stack!");         //if empty
             } else {
                 do {
                     int id = rs.getInt("id");

@@ -23,7 +23,7 @@ public class UserQuery {
              PreparedStatement selectStmt = connection.prepareStatement("SELECT * FROM users WHERE username = ?")) {
             selectStmt.setString(1, username);
             ResultSet rs = selectStmt.executeQuery();
-            if (((ResultSet) rs).next()) {
+            if (((ResultSet) rs).next()) {          //if user exist
                 usernameExists = true;
             }
         }
@@ -261,7 +261,7 @@ public class UserQuery {
                 return null;
             }
         }
-        if(!newUsername.isEmpty()){
+        if(!newUsername.isEmpty()){             //changes if non empty
             player.setUsername(newUsername);
         }
         if(!newPassword.isEmpty()){
@@ -272,7 +272,7 @@ public class UserQuery {
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String sql = "UPDATE users SET";
             ArrayList<Object> values = new ArrayList<Object>();
-            if(!newUsername.isEmpty()){
+            if(!newUsername.isEmpty()){             //if non empty inserts into sql string
                 sql += " username = ?,";
                 values.add(newUsername);
             }
@@ -286,7 +286,7 @@ public class UserQuery {
                 values.add(player.getId());
                 PreparedStatement updateStmt = connection.prepareStatement(sql);
                 for (int i = 0; i < values.size(); i++) {
-                    updateStmt.setObject(i + 1, values.get(i));
+                    updateStmt.setObject(i + 1, values.get(i));     // updateStmt depends of amount value
                 }
                 updateStmt.execute();
                 System.out.println("Profile updated!");
@@ -309,7 +309,7 @@ public class UserQuery {
                 return player;
             }
         }
-        if (!newUsername.isEmpty()) {             //update
+        if (!newUsername.isEmpty()) {             // change if non empty
             player.setUsername(newUsername);
         }
         if (!newPassword.isEmpty()) {
@@ -321,7 +321,7 @@ public class UserQuery {
             String sql = "UPDATE users SET";
             ArrayList<Object> values = new ArrayList<Object>();
             if (!newUsername.isEmpty()) {
-                sql += " username = ?,";
+                sql += " username = ?,";            // if non empty insert into sql string
                 values.add(newUsername);
             }
             if (!newPassword.isEmpty()) {
