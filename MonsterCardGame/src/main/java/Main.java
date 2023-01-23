@@ -1,16 +1,10 @@
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import DB.*;
-import Card.*;
-import User.*;
-import java.util.Scanner;
 
 
+import DB.CardRepository;
 import httpserver.service.*;
 import httpserver.utils.Router;  //Router
 import httpserver.server.Server; //Router
-import httpserver.server.Service;
 
 
 import java.io.IOException;
@@ -35,12 +29,12 @@ public class Main {
         */
         router.addService("/users", new UserService());
         router.addService("/sessions", new LoginService());
-        router.addService("/packages", new createPackageService());
-        router.addService("/deck", new configureDeckService());
-        router.addService("/transactions", new acquirePackageService());
-        router.addService("/cards", new showCardsService());
-        router.addService("/stats", new statsService());
-        router.addService("/score", new statsService());
+        router.addService("/packages", new CreatePackageService());
+        router.addService("/deck", new ConfigureDeckService());
+        router.addService("/transactions", new AcquirePackageService());
+        router.addService("/cards", new ShowCardsService());
+        router.addService("/stats", new StatsService());
+        router.addService("/score", new StatsService());
 
         return router;
     }

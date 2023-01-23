@@ -4,20 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import Card.*;
 import User.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.sql.*;
 import java.util.Random;
 import java.util.Scanner;
 
 
-public class CardQuery {
+public class CardRepository {
     private static final String url = "jdbc:postgresql://localhost:5432/cardgame";
     private static final String user ="postgres";
     private static final String pass="pwd123456";
 
-    public static User getDeckFromDB(User player) throws SQLException {
+    public User getDeckFromDB(User player) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             // Retrieve the card IDs from the 'deck' table for the given user ID
             PreparedStatement selectStmt = connection.prepareStatement("SELECT card1, card2, card3, card4 FROM deck WHERE userid = ?");
@@ -55,8 +53,7 @@ public class CardQuery {
         }
     }
 
-
-    public static String showDeck(User player) {
+    public String showDeck(User player) {
         String response = "";
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String selectSql = "SELECT card1,card2,card3,card4 FROM deck WHERE userid = ?";
@@ -102,10 +99,7 @@ public class CardQuery {
     }
 
 
-
-
-
-    public static int configureDeck(User player, String card1, String card2, String card3, String card4) throws SQLException {
+    public int configureDeck(User player, String card1, String card2, String card3, String card4) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String checkSql = "SELECT * FROM cards WHERE userid=? AND(cardid = ? OR cardid = ? OR cardid = ? OR cardid = ?)";       // schaut in cards table nach dem karten
             try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
@@ -148,7 +142,7 @@ public class CardQuery {
 
 
 
-    public static int acquirePackage(User player) {
+    public int acquirePackage(User player) {
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             connection.setAutoCommit(false);
             // check if enough coins
@@ -191,7 +185,7 @@ public class CardQuery {
 
 
 
-    public static void createDeck(User player) throws SQLException {
+    public void createDeck(User player) throws SQLException {
         // Connect to the database
         Connection conn = DriverManager.getConnection(url, user, pass);
 
@@ -250,7 +244,7 @@ public class CardQuery {
 
 
 
-    public static List<Card> showStack(User player) throws SQLException {
+    public List<Card> showStack(User player) throws SQLException {
 
         try(Connection conn = DriverManager.getConnection(url, user, pass);
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM cards WHERE userid= ?")) {
@@ -293,7 +287,7 @@ public class CardQuery {
 
 
     // OLD VERSION
-    public static /*void*/ int buyPackage(User player) throws SQLException {            // Maybe should also return User so the stack gets updated?
+    public /*void*/ int buyPackage(User player) throws SQLException {            // Maybe should also return User so the stack gets updated?
         // Check if the user has enough coins to buy a package
         if (player.getCoins() < 5) {
             // The user does not have enough coins to buy a package
@@ -355,7 +349,7 @@ public class CardQuery {
         return null;
     }
 
-    public static int createPackage(List<Card> myCard, User player){
+    public int createPackage(List<Card> myCard, User player){
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String insertSql = "INSERT INTO cards (name, damage, cardid,element,cardtype) VALUES (?, ?, ?, ?, ?)";

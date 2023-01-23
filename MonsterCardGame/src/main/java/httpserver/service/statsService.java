@@ -1,7 +1,6 @@
 package httpserver.service;
 
-import DB.UserQuery;
-import User.User;
+import DB.UserRepository;
 import httpserver.http.ContentType;
 import httpserver.http.HttpStatus;
 import httpserver.http.Method;
@@ -11,7 +10,7 @@ import httpserver.server.Service;
 
 import java.sql.SQLException;
 
-public class statsService implements Service {
+public class StatsService implements Service {
     public Response handleRequest(Request request) {
 
         if (request.getMethod() == Method.GET) {
@@ -20,7 +19,7 @@ public class statsService implements Service {
             String response = "";
 
             try {
-                response = UserQuery.showScoreBoard();
+                response = UserRepository.showScoreBoard();
             } catch (SQLException e) {
                 e.printStackTrace();
                 return new Response(HttpStatus.INTERNAL_SERVER_ERROR, ContentType.PLAIN_TEXT, "Error while show Scoreboard");

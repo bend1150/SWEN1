@@ -1,7 +1,6 @@
 package httpserver.service;
 
 
-import Card.Card;
 import httpserver.http.Method;
 import httpserver.server.Request;
 import httpserver.server.Response;
@@ -9,29 +8,26 @@ import httpserver.server.Service;
 import httpserver.http.ContentType;
 import httpserver.http.HttpStatus;
 import DB.*;
-import Card.*;
 import User.*;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-public class acquirePackageService implements Service {
+public class AcquirePackageService implements Service {
     public Response handleRequest(Request request) {
 
-        if(!request.getPathParts().get(1).equals("packages")){       //getPathpars gets the path (transaction/packages)
+        if(!request.getPathParts().get(1).equals("packages")){       //getPathparts gets the path (transaction/packages)
             return new Response(HttpStatus.UNAUTHORIZED, ContentType.PLAIN_TEXT, "Invalid request method");
         }
 
         if (request.getMethod() == Method.POST) {
             String token = request.getHeaderMap().getHeader("Authorization");
             String response;
-            User player = UserQuery.getUserInfoByToken(token);
 
-            int result = CardQuery.acquirePackage(player);
+            UserRepository user = new UserRepository();
+            CardRepository pckg = new CardRepository();
+            User player = user.getUserInfoByToken(token);
+
+
+
+            int result = pckg.acquirePackage(player);
             if (result == 0){
                 response = "You have successfully bought a package";
             } else if (result==1){

@@ -1,22 +1,39 @@
 package DB;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.sql.*;
+import java.util.List;
 import java.util.Scanner;
 
-import Card.*;
-import DB.*;
+import Card.Card;
 import User.*;
 
 
-public class UserQuery {
+public class UserRepository {
 
     private static final String url = "jdbc:postgresql://localhost:5432/cardgame";
     private static final String user ="postgres";
     private static final String pass="pwd123456";
 
-    public static int registerUser(String username, String password) throws SQLException {
+
+
+    public void editUserData(User player, String name, String bio, String image) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            String sql = "UPDATE users SET name = ?, bio = ?, image = ? WHERE id = ?";
+            PreparedStatement updateStmt = connection.prepareStatement(sql);
+            updateStmt.setString(1, name);
+            updateStmt.setString(2, bio);
+            updateStmt.setString(3, image);
+            updateStmt.setInt(4, player.getId());
+            updateStmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public int registerUser(String username, String password) throws SQLException {
         // Check if the username is already in use
         boolean usernameExists = false;
         try (Connection connection = DriverManager.getConnection(url, user, pass);
@@ -61,7 +78,39 @@ public class UserQuery {
         }
     }
 
-    public static /*User*/ int loginUser(String username, String password) throws SQLException {
+    public User showUserData(User player) throws  SQLException{
+        try(Connection conn = DriverManager.getConnection(url, user, pass);
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE userid= ?")) {
+
+            stmt.setInt(1, player.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            List<Card> stack = new ArrayList<>();
+
+            if (!rs.next()) {
+                System.out.println("You have no cards in your stack!");         //if empty
+            } else {
+                do {
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    float damage = rs.getFloat("damage");
+                    String element = rs.getString("element");
+                    String cardType = rs.getString("cardtype");
+                    String cardId = rs.getString("cardid");
+                    int user = rs.getInt("userid");
+
+                } while (rs.next());
+            }
+            conn.close();
+
+        } catch (SQLException ex){
+            System.out.println(ex);
+            return null;
+        }
+        return null;
+    }
+
+    public /*User*/ int loginUser(String username, String password) throws SQLException {
         // check if user and pass match
         System.out.println("LOGIN");
         try (Connection connection = DriverManager.getConnection(url, user, pass);
@@ -93,7 +142,7 @@ public class UserQuery {
         }
     }
 
-    public static User getUserInfoByToken(String token) {
+    public User getUserInfoByToken(String token) {
         User player = null;
         try (Connection connection = DriverManager.getConnection(url, user, pass);
              PreparedStatement selectStmt = connection.prepareStatement("SELECT * FROM users WHERE token = ?")) {
@@ -108,7 +157,10 @@ public class UserQuery {
                 int elo = rs.getInt("elo");
                 int gamesCount = rs.getInt("gamesCount");
                 int wins = rs.getInt("wins");
-                player = new User(username, password, id, coins, elo,gamesCount, wins);
+                String name = rs.getString("name");
+                String bio = rs.getString("bio");
+                String image = rs.getString("image");
+                player = new User(username, password, id, coins, elo,gamesCount, wins,name,bio,image);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,9 +168,9 @@ public class UserQuery {
         return player;
     }
 
-    public static int logout(User player) throws SQLException {
+    public int logout(User player) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, user, pass);
-             PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET token = null WHERE id = ?")) {
+             PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET token = '' WHERE id = ?")) {
             updateStmt.setInt(1, player.getId());
             updateStmt.executeUpdate();
             return 0;
@@ -130,7 +182,7 @@ public class UserQuery {
     }
 
 
-    public static User getWinnerTest() throws SQLException {            //only for test
+    public User getWinnerTest() throws SQLException {            //only for test
         User winner = null;
         try (Connection connection = DriverManager.getConnection(url, user, pass);
              PreparedStatement selectStmt = connection.prepareStatement("SELECT * FROM users WHERE username = ?")) {
@@ -144,13 +196,16 @@ public class UserQuery {
                 int gamesCount = rs.getInt("gamescount");
                 int coins = rs.getInt("coins");
                 int wins = rs.getInt("wins");
-                winner = new User(username,password,id,coins,elo,gamesCount,wins);
+                String name = rs.getString("name");
+                String bio = rs.getString("bio");
+                String image = rs.getString("image");
+                winner = new User(username,password,id,coins,elo,gamesCount,wins,name,bio,image);
             }
         }
         return winner;
     }
 
-    public static User getLoserTest() throws SQLException {            //only for test
+    public User getLoserTest() throws SQLException {            //only for test
         User loser = null;
         try (Connection connection = DriverManager.getConnection(url, user, pass);
              PreparedStatement selectStmt = connection.prepareStatement("SELECT * FROM users WHERE username = ?")) {
@@ -164,13 +219,16 @@ public class UserQuery {
                 int gamesCount = rs.getInt("gamescount");
                 int coins = rs.getInt("coins");
                 int wins = rs.getInt("wins");
-                loser = new User(username,password,id,coins,elo,gamesCount,wins);
+                String name = rs.getString("name");
+                String bio = rs.getString("bio");
+                String image = rs.getString("image");
+                loser = new User(username,password,id,coins,elo,gamesCount,wins,name,bio,image);
             }
         }
         return loser;
     }
 
-    public static void resetTestUser(User player) throws SQLException {                 // Only for test
+    public void resetTestUser(User player) throws SQLException {                 // Only for test
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String sql = "UPDATE users SET coins = 20, elo = 100, gamescount = 0, wins = 0 WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -181,7 +239,7 @@ public class UserQuery {
     }
 
 
-    public static void updateStats(User winner, User loser) throws SQLException {
+    public void updateStats(User winner, User loser) throws SQLException {
         // Winner elo by +3 and wins by +1
         winner.setEloValue(winner.getEloValue() + 3);
         winner.setWins(winner.getWins() + 1);
@@ -241,6 +299,7 @@ public class UserQuery {
     }
 
 
+    //old version
     public static User editProfile(User player) throws SQLException {               //prompts INPUT
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter new username (leave empty if you dont want to chagne it): ");
@@ -296,7 +355,7 @@ public class UserQuery {
         return null;
     }
 
-    public static User editProfileNew(User player, String newUsername, String oldPassword, String newPassword) throws SQLException {
+    public static User editProfileNew(User player, String newUsername, String oldPassword, String newPassword) throws SQLException {    //Test (Old version)
 
         //verifying the old password
         try (Connection connection = DriverManager.getConnection(url, user, pass);

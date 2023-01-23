@@ -14,8 +14,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="JUnit5 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -75,16 +75,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BattleLogicTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="MonsterCardGame" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="BattleLogicTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CardQueryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserRepositoryTest.editUserData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MonsterCardGame" />
       <extension name="coverage">
         <pattern>
@@ -93,13 +84,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="DB" />
-      <option name="MAIN_CLASS_NAME" value="DB.CardQueryTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="MAIN_CLASS_NAME" value="DB.UserRepositoryTest" />
+      <option name="METHOD_NAME" value="editUserData" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserQueryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserRepositoryTest.loginUserSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MonsterCardGame" />
       <extension name="coverage">
         <pattern>
@@ -108,13 +100,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="DB" />
-      <option name="MAIN_CLASS_NAME" value="DB.UserQueryTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="MAIN_CLASS_NAME" value="DB.UserRepositoryTest" />
+      <option name="METHOD_NAME" value="loginUserSuccess" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserQueryTest.editProfile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserRepositoryTest.testLogout" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MonsterCardGame" />
       <extension name="coverage">
         <pattern>
@@ -123,8 +116,24 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="DB" />
-      <option name="MAIN_CLASS_NAME" value="DB.UserQueryTest" />
-      <option name="METHOD_NAME" value="editProfile" />
+      <option name="MAIN_CLASS_NAME" value="DB.UserRepositoryTest" />
+      <option name="METHOD_NAME" value="testLogout" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserRepositoryTest.updateStats" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="MonsterCardGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="DB.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="DB" />
+      <option name="MAIN_CLASS_NAME" value="DB.UserRepositoryTest" />
+      <option name="METHOD_NAME" value="updateStats" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -133,10 +142,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.All in MonsterCardGame" />
-        <item itemvalue="JUnit.CardQueryTest" />
-        <item itemvalue="JUnit.UserQueryTest" />
-        <item itemvalue="JUnit.BattleLogicTest" />
-        <item itemvalue="JUnit.UserQueryTest.editProfile" />
+        <item itemvalue="JUnit.UserRepositoryTest.testLogout" />
+        <item itemvalue="JUnit.UserRepositoryTest.loginUserSuccess" />
+        <item itemvalue="JUnit.UserRepositoryTest.editUserData" />
+        <item itemvalue="JUnit.UserRepositoryTest.updateStats" />
       </list>
     </recent_temporary>
   </component>
@@ -169,6 +178,8 @@
       <workItem from="1673782034462" duration="1181000" />
       <workItem from="1673869678329" duration="33725000" />
       <workItem from="1673961996947" duration="10093000" />
+      <workItem from="1674475821395" duration="14259000" />
+      <workItem from="1674491060808" duration="8546000" />
     </task>
     <servers />
   </component>

@@ -1,25 +1,24 @@
 package httpserver.service;
 
 import Card.Card;
+import DB.CardRepository;
+import DB.UserRepository;
 import httpserver.http.Method;
 import httpserver.server.Request;
 import httpserver.server.Response;
 import httpserver.server.Service;
 import httpserver.http.ContentType;
 import httpserver.http.HttpStatus;
-import DB.*;
 import Card.*;
 import User.*;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class createPackageService implements Service{
+public class CreatePackageService implements Service{
 
     public Response handleRequest(Request request) {
 
@@ -29,7 +28,10 @@ public class createPackageService implements Service{
             List<Card> cards = new ArrayList<Card>();
             String response;
 
-            User player = DB.UserQuery.getUserInfoByToken(token);
+            UserRepository rep = new UserRepository();
+            CardRepository pckg = new CardRepository();
+
+            User player = rep.getUserInfoByToken(token);
 
             for (int i = 0; i < 5 ; i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -55,7 +57,7 @@ public class createPackageService implements Service{
                     cards.add(monsterCard);
                 }
             }
-            int status = DB.CardQuery.createPackage(cards, player);
+            int status = pckg.createPackage(cards, player);
 
             if (status == 0){
                 response = "Package successfully created by " + player.getUsername();

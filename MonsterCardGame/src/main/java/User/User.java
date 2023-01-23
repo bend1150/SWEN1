@@ -20,6 +20,37 @@ public class User {
 
     private int wins;
 
+    private String name;
+
+    private String bio;
+    private String image;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+
+
     public int getWins() {
         return wins;
     }
@@ -37,7 +68,7 @@ public class User {
     }
 
 
-    public User(String username, String password, int id, int coins, int eloValue, int gamesCount, int wins) {
+    public User(String username, String password, int id, int coins, int eloValue, int gamesCount, int wins, String name, String bio, String image) {
         this.username = username;
         this.password = password;
         this.id = id;
@@ -45,6 +76,9 @@ public class User {
         this.eloValue = eloValue;
         this.gamesCount = gamesCount;
         this.wins = wins;
+        this.name = name;
+        this.bio = bio;
+        this.image = image;
     }
 
     public int getId() {

@@ -8,26 +8,23 @@ import httpserver.server.Service;
 import httpserver.http.ContentType;
 import httpserver.http.HttpStatus;
 import DB.*;
-import Card.*;
 import User.*;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class showCardsService implements Service {
+public class ShowCardsService implements Service {
     public Response handleRequest(Request request) {
         if (request.getMethod() == Method.GET) {
             String response="";
             String token = request.getHeaderMap().getHeader("Authorization");
-            User player = UserQuery.getUserInfoByToken(token);
+
+            UserRepository rep = new UserRepository();
+            CardRepository stck = new CardRepository();
+            User player = rep.getUserInfoByToken(token);
 
             try {
-                List<Card> myCard= CardQuery.showStack(player);
+                List<Card> myCard= stck.showStack(player);
                 for (Card card: myCard) {
                     response += "Name: " + card.getName() + "("+card.getDamage()+")"+"\n";
                 }

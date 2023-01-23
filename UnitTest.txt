@@ -1,0 +1,26 @@
+For Unit test registerUser() & loginUser() & testLogout()
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3304,'TestUser','123',0,0,0,0);
+
+
+
+
+Für editUserData(): siehe db und passe password an
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins,token,name,bio,image) VALUES (3301,'ProfileTest','5',0,0,0,0,'UserData-Token','','','');
+
+für updateStats(): 
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3302,'winnerTest','winner123',20,100,0,0);
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3303,'loserTest','loser123',20,100,0,0);
+
+winnerTest is also used for showDeck()
+
+
+for configureDeck() testing:
+
+INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3301,'WATERGOBLIN','10.0','WATER','MONSTER',3304,'12345');
+
+INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3302,'FIREGOBLIN','15.0','WATER','MONSTER',3304,'23456');
+
+INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3303,'ORK','10.0','NORMAL','MONSTER',3304,'34567');
+
+INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3304,'KNIGHT','10.0','NORMAL','MONSTER',3304,'45678');
+

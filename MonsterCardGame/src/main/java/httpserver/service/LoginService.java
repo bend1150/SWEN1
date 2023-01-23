@@ -9,7 +9,7 @@ import httpserver.server.Response;
 import httpserver.server.Service;
 import httpserver.http.ContentType;
 import httpserver.http.HttpStatus;
-import DB.UserQuery;
+import DB.UserRepository;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,12 +23,13 @@ public class LoginService implements Service {
             String username = "";
             String password = "";
             String response = "";
+            UserRepository usr = new UserRepository();
             try {
                 JSONObject body = new JSONObject(request.getBody());
                 username = body.get("Username").toString();
                 password = body.get("Password").toString();
 
-                int result = DB.UserQuery.loginUser(username, password);
+                int result = usr.loginUser(username, password);
 
                 if (result == 0) {
                     response = "You have succesfully logged in!";
