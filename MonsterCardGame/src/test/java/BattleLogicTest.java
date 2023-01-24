@@ -1,12 +1,12 @@
 
+import Battle.BattleLogic;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import Card.*;
 import User.*;
-
-import java.sql.SQLException;
+import Battle.*;
 
 class BattleLogicTest {
 
@@ -81,6 +81,17 @@ class BattleLogicTest {
         assertEquals(1,btl.MonsterBattle(card1,card2));
         assertEquals(2,btl.MonsterBattle(card2,card1));
         assertEquals(3,btl.MonsterBattle(card1,card1));
+    }
+
+    @Test       //Same card but with different Damage
+    void MonsterBattle4(){
+        Card card1 = new MonsterCard("TROLL","FIRE", 50,1,"1234");
+        Card card2 = new MonsterCard("TROLL","FIRE", 25,1,"1234");
+        BattleLogic btl = new BattleLogic();
+        assertEquals(1,btl.MonsterBattle(card1,card2));
+        assertEquals(2,btl.MonsterBattle(card2,card1));
+        assertEquals(3,btl.MonsterBattle(card1,card1));
+
     }
 
     @Test   //Ice should win against Water

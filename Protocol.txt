@@ -9,27 +9,35 @@ Users – repräsentiert die Spieler im Spiel, es hat folgende Eigenschaften:
 •	eloValue
 •	gamesCount
 •	wins
+•	name
+•	bio
+•	image
 
-Card – repräsentiert die Spielkarten, es hat folgende Eigenschaften:
+
+
+Card – ist eine abstrakte Klasse und repräsentiert die Spielkarten, es hat folgende Eigenschaften:
 •	cardid
 •	id
 •	name
 •	damage
 •	elementType
+•	cardId
+
+MonsterCard und Spellcard ist eine Vererbung vom Klasse 'Card'.
 
 Die CardQuery-Klasse beinhaltet alle Methoden welches mit der Datenbank interagieren.
 Dazu gehören das Konfigurieren von Decks, Kaufen von Packages und das Erstellen von Packages und auch das Anzeigen von dem aktuellen Karten.
 
 Die UserQuery-Klasse beinhaltet User-basierten Methoden welches mit der Daten interagiert, dazu gehört das Login, Registrierung und das Updaten der aktuellen Stats.
-Die BattleLogic-Klasse beinhalte die Logik für die Kämpfe, diese inkudiert verschiedene Spezialregeln (z.B.: Wasser fügt mehr Schaden gegen Feuer).
+Die Battle.BattleLogic-Klasse beinhalte die Logik für die Kämpfe, diese inkudiert verschiedene Spezialregeln (z.B.: Wasser fügt mehr Schaden gegen Feuer).
 
 Unit Test
 Für die folgende Unit-Tests werden hartkodierte Zeilen in der Datenbank benötigt:
-Für registerUser() & loginUser():
+Für registerUser() , loginUser() und testLogout():
 INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3304,'TestUser','123',0,0,0,0);
-Für editProfile():
-INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3301,'editProfileTest','5',0,0,0,0);
 
+Für editUserData():
+INSERT INTO users(id,username,password,coins,elo,gamescount,wins,token,name,bio,image) VALUES (3301,'ProfileTest','5',0,0,0,0,'UserData-Token','','','');
 
 Für updateStats() & showDeck():
 INSERT INTO users(id,username,password,coins,elo,gamescount,wins) VALUES (3302,'winnerTest','winner123',20,100,0,0);
@@ -43,22 +51,26 @@ INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3302,'F
 INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3303,'ORK','10.0','NORMAL','MONSTER',3304,'34567');
 
 INSERT INTO cards(id,name,damage,element,cardtype,userid,cardid) VALUES (3304,'KNIGHT','10.0','NORMAL','MONSTER',3304,'45678');
+
+
 Diese hardkodierten Befehle werden benötigt da die Methoden die Informationen aus der Datenbank holen.
 
 Datenbank
 Die Datenbank heißt „cardgame“ und hat 3 Tabellen.
 Tabellen: 
 users
- 	attribute: id, username, password, coins, elo, gamescount, wins, token
+ 	attribute: id(int & auto increment), username(varchar), password(varchar), coins(int), elo(int), gamescount(int), wins(int), token(varchar), name(varchar), bio(varchar), image(varchar)
 cards
-	attribute: id, name, damage, element, cardtype, userid, cardid
+	attribute: id(int & auto increment), name(varchar), damage(double precision), element(varchar), cardtype(varchar), userid(int), cardid(varchar)
  
 deck
-	id, userid, card1, card2, card3, card4
+	id(int), userid(int), card1(varchar), card2(varchar), card3(varchar), card4(varchar)
  
-Die Attribute card1,card2,card3,card4 repräsentieren die cardid von der Tabelle “cards”.
+Die Attribute card1,card2,card3,card4 repräsentieren die einzelnen Karten mithilfe der 'cardid' von der Tabelle 'cards'.
 Für die Tabelle deck wurde zusätzlich noch folgender Befehl hinzugefügt:
+
 ALTER TABLE deck ADD CONTRAINT deck_userid_unique UNIQUE (userid);
+
 Somit hat jede userid nur eine Reihe, damit werden beim Rekonfigurieren des Decks keine neue Einträge hinzugefügt.
 
 GIT

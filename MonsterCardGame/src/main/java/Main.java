@@ -35,6 +35,8 @@ public class Main {
         router.addService("/cards", new ShowCardsService());
         router.addService("/stats", new StatsService());
         router.addService("/score", new StatsService());
+        router.addService("/battles", new BattleService());
+
 
         return router;
     }
@@ -60,7 +62,7 @@ public class Main {
         User user2=UserQuery.loginUser(username2,password2);
 
 
-        int winner=BattleLogic.battle(user1,user2);
+        int winner=Battle.BattleLogic.battle(user1,user2);
         System.out.println("winner is "+ winner); //2
 
 */
@@ -127,7 +129,7 @@ public class Main {
 
 
 /*
-        int victory = BattleLogic.battle(player1,player2);
+        int victory = Battle.BattleLogic.battle(player1,player2);
         if(victory == 1 || victory == 2) {
             System.out.println(" >>>>>>>>>>>>>>>>>>>Player" + victory + " wins!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         } else if(victory == 3){

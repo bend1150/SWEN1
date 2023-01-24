@@ -238,6 +238,23 @@ public class UserRepository {
         }
     }
 
+    public void updateGamesCount(User player1,User player2) throws SQLException{            //only updates gamesCount -> DRAW
+        player1.setGamesCount(player1.getGamesCount()+1);
+        player2.setGamesCount(player2.getGamesCount()+1);
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement updateStmt = connection.prepareStatement("UPDATE users SET gamescount = ? WHERE id = ?")) {
+            updateStmt.setInt(1,player1.getGamesCount());
+            updateStmt.setInt(2, player1.getId());
+            updateStmt.executeUpdate();
+
+            updateStmt.setInt(1,player2.getGamesCount());
+            updateStmt.setInt(2, player2.getId());
+            updateStmt.executeUpdate();
+        }
+
+    }
+
 
     public void updateStats(User winner, User loser) throws SQLException {
         // Winner elo by +3 and wins by +1

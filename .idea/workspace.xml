@@ -66,11 +66,21 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.All in MonsterCardGame">
     <configuration name="All in MonsterCardGame" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MonsterCardGame" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BattleLogicTest.MonsterBattle4" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="MonsterCardGame" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BattleLogicTest" />
+      <option name="METHOD_NAME" value="MonsterBattle4" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -123,29 +133,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserRepositoryTest.updateStats" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="MonsterCardGame" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="DB.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="DB" />
-      <option name="MAIN_CLASS_NAME" value="DB.UserRepositoryTest" />
-      <option name="METHOD_NAME" value="updateStats" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.All in MonsterCardGame" />
+        <item itemvalue="JUnit.BattleLogicTest.MonsterBattle4" />
         <item itemvalue="JUnit.UserRepositoryTest.testLogout" />
         <item itemvalue="JUnit.UserRepositoryTest.loginUserSuccess" />
         <item itemvalue="JUnit.UserRepositoryTest.editUserData" />
-        <item itemvalue="JUnit.UserRepositoryTest.updateStats" />
       </list>
     </recent_temporary>
   </component>
@@ -180,6 +174,8 @@
       <workItem from="1673961996947" duration="10093000" />
       <workItem from="1674475821395" duration="14259000" />
       <workItem from="1674491060808" duration="8546000" />
+      <workItem from="1674576797525" duration="4441000" />
+      <workItem from="1674581471779" duration="3674000" />
     </task>
     <servers />
   </component>

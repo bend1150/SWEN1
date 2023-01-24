@@ -15,32 +15,38 @@ public class CardRepository {
     private static final String user ="postgres";
     private static final String pass="pwd123456";
 
+
+
+
     public User getDeckFromDB(User player) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            // Retrieve the card IDs from the 'deck' table for the given user ID
+            // get cardid from 'deck' table
             PreparedStatement selectStmt = connection.prepareStatement("SELECT card1, card2, card3, card4 FROM deck WHERE userid = ?");
             selectStmt.setInt(1, player.getId());
             ResultSet rs = selectStmt.executeQuery();
             if (rs.next()) {
                 List<Card> deck = new ArrayList<>();
-                // Retrieve the corresponding card objects from the 'cards' table and add them to the user's deck list
+                // gets the card from 'cards' table and puts in deck
                 for (int i = 1; i <= 4; i++) {
-                    int cardId = rs.getInt("card" + i);
-                    PreparedStatement selectCardStmt = connection.prepareStatement("SELECT * FROM cards WHERE id = ?"); //jede einzelne karte wird geholt
-                    selectCardStmt.setInt(1, cardId);
+                    String cardId = rs.getString("card" + i);
+                    PreparedStatement selectCardStmt = connection.prepareStatement("SELECT * FROM cards WHERE cardid = ?");
+                    selectCardStmt.setString(1, cardId);
                     ResultSet cardRs = selectCardStmt.executeQuery();
                     if (cardRs.next()) {
                         String type = cardRs.getString("cardtype");
                         if (type.equals("MONSTER")) {
                             String name = cardRs.getString("name");
                             String elementType = cardRs.getString("element");
-                            int damage = cardRs.getInt("damage");
-                            deck.add(new MonsterCard(name, elementType, damage, cardId,""));
+                            float damage = cardRs.getFloat("damage");
+                            int id = cardRs.getInt("id");
+
+                            deck.add(new MonsterCard(name, elementType, damage,id,cardId));
                         } else if (type.equals("SPELL")) {
                             String name = cardRs.getString("name");
                             String elementType = cardRs.getString("element");
-                            int damage = cardRs.getInt("damage");
-                            deck.add(new SpellCard(name,elementType, damage, cardId,""));
+                            float damage = cardRs.getFloat("damage");
+                            int id = cardRs.getInt("id");
+                            deck.add(new SpellCard(name, elementType, damage,id, cardId));
                         }
                     }
                 }
@@ -52,6 +58,8 @@ public class CardRepository {
             }
         }
     }
+
+
 
     public String showDeck(User player) {
         String response = "";
@@ -344,7 +352,7 @@ public class CardRepository {
     }
 
     public static User updateStack(User user1, User user2){
-        // This function belongs at the end of the BattleLogic so the
+        // This function belongs at the end of the Battle.BattleLogic so the
         //  DB is updated with the current Version of the Stack and deck of the player
         return null;
     }
